@@ -1,0 +1,3 @@
+export const ADD_ARTICLE = "ADD_ARTICLE";
+export const USER_AUTHENTICATED = "USER_AUTHENTICATED";
+

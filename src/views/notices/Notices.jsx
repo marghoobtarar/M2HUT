@@ -9,8 +9,10 @@ import CreateNotices from './create_notices/CreateNotices';
 import DetailNotices from './detail_notices/DetailNotices';
 import blog from '../../assets/img/Icon/blog.jpg';
 import EditPost from './edit_post/EditPost';
+import Footer from '../../components/footer/Footer'
 
-function Notices() {
+function Notices(props) {
+  
     useEffect(()=>{
 
     },[])
@@ -390,9 +392,11 @@ function Notices() {
                           />:null
 
     }
-      
 
+      
     </div>
+    <Footer/>
+
     </div>
   );
 }

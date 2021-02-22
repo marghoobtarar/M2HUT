@@ -9,10 +9,13 @@
     "@testing-library/user-event": "^12.1.10",
     "downloadjs": "^1.4.7",
     "jquery": "^3.5.1",
+    "js-cookie": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.2",
     "react-truncate": "^2.4.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
