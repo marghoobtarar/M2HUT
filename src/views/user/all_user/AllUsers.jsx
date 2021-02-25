@@ -40,7 +40,7 @@ function AllUsers(props) {
               <h2 className="page-title mb-2 ">Users Information</h2>
             </div>
             <div className="col-xs-12 col-sm-6">
-              <a href="#" className="create-post pull-right"><span><img src="img/add-icon.png" alt="image" /></span> Create User</a>
+              <a onClick={e => props.createUser()} style={{cursor:'pointer'}} className="create-post pull-right"><span><img src="img/add-icon.png" alt="image" /></span> Create User</a>
             </div>
           </div>
           <div className="user-list">

@@ -1240,3 +1240,567 @@ span.download-report.text-right.pull-right a{
 .table td .d-block a .fa.fa-trash {
   color: #e83d4e;
 }
+
+/*progressbar*/
+#progressbar {
+  padding: 0;
+  margin: 0 0 30px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+}
+#progressbar li {
+  list-style-type: none;
+  color: #666;
+  text-transform: capitalize;
+  font-size: 14px;
+  width: 33.33%;
+  float: left;
+  position: relative;
+  letter-spacing: 1px;
+  text-align: center;
+  font-weight: 400;
+}
+#progressbar li.active{
+  font-weight: 700;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  display: block;
+  font-size: 14px;
+  color: #333;
+  background: white;
+  border-radius: 25px;
+  margin: 0 auto 10px auto;
+  box-shadow: 0 0 10px 10px #eee; 
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 14px;
+  z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none;
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #2B820D;
+  color: #fff;
+  box-shadow: 0 0 10px 10px #eee; 
+}
+.user-form-sec{
+  display: block;
+  background: #fff;
+  padding:50px;
+  border-radius: 15px;
+}
+.user-form-sec label {
+  display: block;
+  padding: 0px;
+  margin: 0 0 5px;
+  font-weight: 700;
+  color: #777;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+.user-form-sec input {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  background: #f7f7f7 !important;
+  border: 0 !important;
+  height: 45px;
+  border-radius: 4px;
+  outline: none;
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+.user-form-sec .custom-select {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  background-color: #f7f7f7;
+  border: 0 !important;
+  height: 45px;
+  border-radius: 4px;
+  outline: none;
+  margin: 0 0 5px;
+  box-shadow: none;
+  outline: none;
+  background-size: 12px;
+  font-size: 15px;
+}
+.user-img-uplod.p-reletive {
+  display: block;
+  height: 100%;
+  position: relative;
+}
+.user-img-uplod .profile_holder img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 0 10px;
+  border-radius: 5px;
+  object-fit: cover;
+  object-position: center;
+}
+.user-img-uplod strong {
+  text-align: center;
+  display: block;
+  margin: 30px 0 5px;
+  font-size: 16px;
+}
+.user-img-uplod .btn.btn-create {
+  background: #fff;
+  border-radius: 4px;
+  color: #0f8e2e;
+  padding: 8px 30px;
+  display: block;
+  font-weight: 600;
+  border: 2px solid #0f8e2e;
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+}
+.mb-100{
+  margin-bottom: 100px;
+}
+.mb-200{
+  margin-bottom: 200px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 90px;
+  height: 34px;
+}
+.switch input {display:none;}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ff7e00;
+  -webkit-transition: .4s;
+  transition: .4s;
+   border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2B820D;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2B820D;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(55px);
+}
+
+/*------ ADDED CSS ---------*/
+.slider::after {
+  content: 'Pending';
+  color: white;
+  display: block;
+  position: absolute;
+  transform: translate(-25%,-50%);
+  top: 50%;
+  left: 50%;
+  font-size: 12px;
+  font-weight: 300;
+}
+.switch input:checked + .slider::after {
+  content: 'Active';
+  transform: translate(-80%,-50%);
+}
+/*--------- END --------*/
+
+
+
+
+
+/* ***********************akmal**************************** */
+.email-set p{
+  font-size: 12px;
+}
+.email-status-div {
+background: #fff;
+padding: 20px;
+border-radius: 15px;
+height: 500px;
+}
+li.support_btn1 {
+position: absolute;
+bottom: 40px;
+}
+li.support_btn1 li img {
+ max-width: 100%;
+ height: auto;
+ display: block;
+}
+.edit-email-sec button{
+display: inline;
+font-weight: 700;
+color: #777;
+font-size: 12px;
+/*width: 95px;
+height: 40px;*/
+border: none;
+background-color: #f3f3f3;
+
+}
+.edit-email-sec .active{
+
+display: inline;
+font-weight: 700;
+color: #777;
+font-size: 12px;
+border: 3px solid;
+border-radius: 10px;
+border-bottom: 0px;
+width: 125px;
+height: 40px;
+border-bottom-left-radius: 0px;
+border-bottom-right-radius: 0px;
+
+}
+.emailform form{
+margin-left: 35px;
+margin-top: 30px;
+
+}
+.emailform input{
+border-radius: 5px;
+border:0px;
+margin-top: -30px;
+}
+.emailform label{
+margin-top: 8px;
+}
+.btnemailupdate{
+margin-left: 50px;
+margin-top: 40px;
+}
+.btnemailupdate input{
+padding: 8px 30px;
+border-radius: 10px;
+width: 130px;
+height: 45px;
+color: #0f8e2e;
+font-weight: 700;
+border: 2px solid #0f8e2e ;
+
+
+}
+.btnemailupdate input:hover{
+
+  color: #0f8e2e;
+  
+  }
+.reglable{
+margin-top: 30px;
+
+}
+.reglable input{
+width: 320px;
+border-radius: 5px;
+border:  none;
+
+}
+.textbox textarea{
+text-align: left;
+margin-top: 20px;
+width: 400px;
+height: 300px;
+
+
+}
+.btnregupdate button{
+padding: 8px 30px;
+border-radius: 10px;
+width: 130px;
+height: 45px;
+color: #0f8e2e;
+font-weight: 700;
+border: 2px solid #0f8e2e ;
+}
+.btnregupdate{
+margin-left: 25px;
+margin-top: 40px;
+}
+.susinput{
+margin-top: 30px;
+margin-left: 0px;
+}
+.susinput input{
+width: 400px;
+border-radius: 5px;
+border:  none;
+}
+@media screen and (min-width: 1920px) {
+.edit-email-sec button { width: 80px;}
+
+}
+@media screen and (min-width: 480px) {
+.rightbar { margin: 20px 0px;}
+
+}
+@media screen and (max-width: 480px) {
+.rightbar { margin: 20px 0px; }
+
+.edit-email-sec button{
+ margin:auto;
+ margin-bottom: 20px;
+ display: block;
+
+}
+.edit-email-sec .active{
+ margin:auto;
+ margin-bottom: 20px;
+ display: block;
+
+}
+}
+textarea:focus, input:focus{
+outline: none;
+}
+.reglable:focus, input:focus{
+outline: none;
+}
+/*
+@media screen and (max-height: 400px) {
+.email-status-div { height : 100px;}
+
+}*/
+@media screen and (max-width: 600px) {
+
+.testing_purpose{
+ /* margin: auto; */
+ margin-left: 5%;
+}
+.email-status-div {
+
+ height: 350px;
+}
+}
+
+.sys_data {
+margin: 40px 40px;
+
+}
+.sys_data input{
+margin: 8px 0px;
+border-radius: 5px;
+border: none;
+display: block;
+
+}
+
+.colour_box{
+display: block
+
+}
+.colour_box p{
+display: inline;
+padding: 12px;
+}
+.box{
+width: 100px;
+height: 100px;  
+background: #2b820d;
+border-radius: 10px;
+
+}
+
+.ck-editor__editable_inline{
+  min-height: 300px;
+}
+
+
+/* ***************************style page****************** */
+
+.sys_data {
+  margin: 40px 40px;
+  
+}
+.sys_data input{
+  border-radius: 4px;
+  border: none;
+  display: block;
+  height: 35px;
+  width: 100%;
+  padding: 5px 10px;
+  background: #fff;
+  outline: none;
+  margin: 0 0 5px;
+
+}
+.sys_data p{
+   padding-left: 14px;
+}
+.colour_box{
+  display: block;
+  
+
+}
+.colour_box p{
+  
+  padding: 12px;
+ 
+}
+.box1{
+   width: 100px;
+   height: 100px;  
+   background: #2b820d;
+   border-radius: 10px;
+  
+
+}
+.box2{
+  width: 100px;
+  height: 100px;  
+  background: #cc8a0a;
+  border-radius: 10px;
+ 
+
+}
+.box3{
+  width: 100px;
+  height: 100px;  
+  background: #8e8e8e;
+  border-radius: 10px;
+ 
+
+}
+.lower_box input{
+  border-radius: 4px;
+  border: none;
+  display: block;
+  /* height: 45px; */
+  width: 100%;
+  padding: 5px 10px;
+  background: #fff;
+  outline: none;
+  margin: 10px 0 5px;
+
+  
+}
+.main_boxes{ 
+   
+ margin-top: 30px;
+}
+
+.main_boxes button{
+  border: none;
+  /* width: 140px; */
+  text-align: left;
+  background: none;
+  white-space: nowrap;
+  font-size: 13px;
+  color:  #777 ;
+}
+.second_line{
+  margin-top: 20px;
+  
+}
+.second_line button{
+  border: none;
+  color:  #777 ;
+
+}
+.upload-btn-wrapper2 {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  margin-top: 10px;
+ 
+  
+
+}
+.upload-btn-wrapper2 .btn {
+   border: 0;
+  background: white; 
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500; 
+  margin: 0 0 0;
+  
+  
+  
+ 
+}
+.upload-btn-wrapper2 input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  
+  
+}
+.upload-btn-wrapper2 button{
+  background-color:white;
+  border-radius: 5px;
+  color: #777;
+
+  
+}
+
+
+/* ***********typography**************** */
+.main-forms{
+  margin-top: 20px;
+  display: block;
+  /* margin-left: -10px; */
+  
+}
+.f-form select{
+  width: 100%;
+  padding: 5px 10px;
+  height: 45px;
+  border-radius: 4px;
+  border: none;
+  color: #777;
+  background: #fff;
+  margin: 0 0 5px;
+  display: block;
+  
+
+}
+.h1heading{
+  display: block; 
+  /* margin-left: -12px; */
+}

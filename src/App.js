@@ -13,6 +13,7 @@ import List from "./views/DummyList";
 import Form from "./views/Form";
 import { BrowserRouter as Router, Route,Redirect } from "react-router-dom";
 import { UserProvider } from "./Context";
+import Settings from './views/settings/Settings'
 
 
 // import { addArticle ,userAuthenticated} from "./js/actions/index";
@@ -53,13 +54,13 @@ function App(props) {
       <header className="App-header">
       <Router>
       <UserProvider value={isLoggedIn}>
-
+      <Navbar/>
         {!isLoggedIn?
         <>
-        <Route exact path="/" component={ReportLogs}/>
-        <Route path="/home" component={ReportLogs}/>
+        <Route exact path="/" component={User}/>
+        <Route path="/home" component={User}/>
 
-        <Redirect to='/home' component={ReportLogs}/>
+        <Redirect to='/home' />
         </>
          :
          <>

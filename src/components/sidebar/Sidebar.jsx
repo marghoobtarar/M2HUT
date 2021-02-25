@@ -7,6 +7,8 @@ import userImage from '../../assets/img/take-img.png'
 import dashboard from '../../assets/img/Icon/dashboard.png'
 import register from '../../assets/img/Icon/user.png'
 import data from '../../assets/img/Icon/file.png'
+import settings from '../../assets/img/Icon/settings.png'
+
 import notices from '../../assets/img/Icon/download.png'
 import supportBtn from '../../assets/img/support_btn.png'
 
@@ -48,6 +50,9 @@ function AllNotices(props) {
             </li>
             <li  className={props.nav_page==='Notices'?'active':''}>
               <a href="#"><span><img src={notices} width="15px" alt="icon" /></span>Notices</a>
+            </li>
+            <li  className={props.nav_page==='Settings'?'active':''}>
+              <a href="#"><span><img src={settings} width="15px" alt="icon" /></span>Settings</a>
             </li>
             <li className="support_btn">
               <a href="#" ><span><img src={supportBtn} alt="btn"/></span></a>

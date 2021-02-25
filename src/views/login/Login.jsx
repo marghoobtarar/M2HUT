@@ -28,25 +28,25 @@ function Login(props) {
 
   useEffect(()=>{
     console.log('check logged in ',logged_in)
-    axios(
-      {
-        method:'GET',
-        url: `http://127.0.0.1:8000/adminuser/hello/`,
-        headers:{
-          Authorization:  `Bearer ${localStorage.getItem('access_token')}`
-        }
-    }).then((res)=>{
-      setLoggedIn(true)
-      // var access =true
-      // props.userAuthenticated({ access });
-      // console.log('user has logged in',logged_in)
-      setIsLoggedIn(true)
+    // axios(
+    //   {
+    //     method:'GET',
+    //     url: `http://127.0.0.1:8000/adminuser/hello/`,
+    //     headers:{
+    //       Authorization:  `Bearer ${localStorage.getItem('access_token')}`
+    //     }
+    // }).then((res)=>{
+    //   setLoggedIn(true)
+    //   // var access =true
+    //   // props.userAuthenticated({ access });
+    //   // console.log('user has logged in',logged_in)
+    //   setIsLoggedIn(true)
       
       
-    }).catch((err)=>{
+    // }).catch((err)=>{
      
-      setIsLoggedIn(false)
-    }) 
+    //   setIsLoggedIn(false)
+    // }) 
   //  console.log(props.user_logged_in)
     var remember = localStorage.getItem('remember')
     if(remember){
@@ -85,31 +85,79 @@ function Login(props) {
       localStorage.removeItem('remember')
     }
     var payload = {email:credentials.email,password:credentials.password}
-       // axios({
-    //   method: "POST",
-    //   url: `http://127.0.0.1:8000/user/token/`,
-    //   body:data,
-    //   headers: {
-    //      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    console.log(payload)
+    fetch("https://m2hut-backend.wantechsolutions.com/api/admin/authenticate", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({email:'info@ceta.org.za',password:'12345678'}),
+		})
+			.then((r) => r.json().then((data) => ({ status: r.status, body: data })))
+			.then( (myJson)=> {
 
-    //     "Content-Type": "multipart/form-data",
-    //     "Content-Type": "application/json",
-    //   },
+        // props.addArticle({ 'sddsj' });
+        // var access =true
+        localStorage.setItem('access_token',myJson.body.access_token)
+        // props.userAuthenticated({ access });
+        setLoggedIn(true)
+        setIsLoggedIn(true)
+        // console.log(access)
+        
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+      //  fetch(`https://m2hut-backend.wantechsolutions.com/api/authenticate/`,
+      //  {
+      //    method:"POST",
+      //    headers:{
+      //     				"accept": "application/json",
+			// 	          "Content-Type": "application/json",
+      //  },
+      //  body:JSON.stringify(payload)
+      
+      // }).then((res)=>{
+      //   console.log(res)
+      // }).catch(err=>{console.log(err)})
+    //   axios ({
+    //   method: "POST",
+    //   url: `https://m2hut-backend.wantechsolutions.com/api/admin/authenticate`,
+    //   body:JSON.stringify(),
+    //   headers: {
+		// 		"accept": "application/json",
+		// 		"Content-Type": "application/json",
+		// 	}
+      
+    // }) 
+    //  .then((res)=>{
+    //     // props.addArticle({ 'sddsj' });
+    //     // var access =true
+    //     localStorage.setItem('access_token',res.data.access)
+    //     // props.userAuthenticated({ access });
+    //     setLoggedIn(true)
+    //     setIsLoggedIn(true)
+    //     // console.log(access)
+    //   }).catch((err)=>{
+    //     console.log(err)
+    //     setInValid(true)
+    //   })
+    // http://7f09c4ca126b.ngrok.io/m2hut-backend/public/api
+    // axios
+    // .post(`http://m2hut-backend.wantechsolutions.com/api/authenticate/`, payload)
+    // .then((res)=>{
+    //   // props.addArticle({ 'sddsj' });
+    //   // var access =true
+    //   localStorage.setItem('access_token',res.data.access)
+    //   // props.userAuthenticated({ access });
+    //   setLoggedIn(true)
+    //   setIsLoggedIn(true)
+    //   // console.log(access)
+    // }).catch((err)=>{
+    //   console.log(err)
+    //   setInValid(true)
     // })
-    axios
-    .post(`http://127.0.0.1:8000/api/token/`, payload)
-    .then((res)=>{
-      // props.addArticle({ 'sddsj' });
-      // var access =true
-      localStorage.setItem('access_token',res.data.access)
-      // props.userAuthenticated({ access });
-      setLoggedIn(true)
-      setIsLoggedIn(true)
-      // console.log(access)
-    }).catch((err)=>{
-      console.log(err)
-      setInValid(true)
-    })
   }
   return (
     <div className="container h-100" style={{marginTop:'10%'}}>
