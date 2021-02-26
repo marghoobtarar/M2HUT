@@ -1,12 +1,28 @@
 import React,{useState,useEffect} from 'react';
 import download from "downloadjs";
 
+import moment from 'moment';
 import styles from './styles'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Sidebar from '../../components/sidebar/Sidebar';
+import Navbar from '../../components/navbar/Navbar';
+
+// let weeksDays = Array.from({length: moment().daysInMonth()}, (x, i) => moment().startOf('month').add(i, 'days').format('ll'))
+
+let currentMonth = moment().format('MMMM');
+let monthList = Array.apply(0, Array(12)).map(function(_,i){return moment().month(i).format('MMMM')})
+// console.log('index of array',monthList.map(item =>item).indexOf(currentMonth))
+let month = monthList.slice(0,1+monthList.map(item =>item).indexOf(currentMonth))
+
+// return month
 function ReportLogs() {
     useEffect(()=>{
+
+     
+        // console.log("current Month",currentMonth)
+        // console.log("month List",monthList)
+        // console.log("current month days",weeksDays)
 
         var acc = document.getElementsByClassName("accordion");
         var i;
@@ -24,7 +40,7 @@ function ReportLogs() {
 
     },[])
     const [registerLogs , setRegisterLogs] = useState({
-        'Janurary':[
+        'January':[
             {
                 id:'1',
                 date:'12/01/2021',
@@ -49,6 +65,7 @@ function ReportLogs() {
                     date:'12/01/2021',
                 }],
     })
+  
     const downloadPdf= e =>{
         console.log('download pdf',e)
         // axios
@@ -65,10 +82,16 @@ function ReportLogs() {
           
         // });
     }
+    const monthDataPdf = e=>{
+        console.log(e)
+        // var data = month.map(item =>item).indexOf(e)
+        // console.log(data)
+    }
    
   return (
    
     <div>
+        <Navbar/>
         <div className="wrapper container d-flex align-items-stretch">
         <Sidebar nav_page={'Data'} />
         <div id="content" className="p-4 p-md-5 pt-5">
@@ -78,24 +101,24 @@ function ReportLogs() {
                     <h2 className="page-title mb-4 ">Register Logs</h2>
                     </div>
                 </div>
-                {Object.keys(registerLogs).map(function (data,index) {
-                    return<div className="register-log-sec" key={index}>
+                {month.map(function (data,indexMonth) {
+                    return<div className="register-log-sec" key={indexMonth}>
                     <button className="accordion">
                     {data}
                     </button>
                     <div className="panel" >
-                        <a href="#" className="monthly-log text-right">Download month register </a>
-                            {registerLogs[data].map(function (listData,index) {
+                        <a onClick={e=>monthDataPdf(`2021-${month.map(item =>item).indexOf(data) +1}-1`)} className="monthly-log text-right">Download month register </a>
+                            { Array.apply(0, Array(new Date(2021, indexMonth+1, 0).getDate()) ).map(function (listData,index) {
                                 return  <ul className="reg-log-list" key={index}>
                                             <li>
                                                 <span className="reg-date-sec">
                                                     <span className="font-bold">
-                                                        {listData.date}
+                                                     {`${index+1}/${indexMonth+1}/2021`}
                                                     </span>
                                                     <span >All Employee Register and Data Captured</span>
                                                 </span>
                                                 <span className="download-report text-right pull-right">
-                                                    <a style={{cursor:"pointer"}}onClick={e=>downloadPdf(listData)}>Download Register</a>
+                                                    <a style={{cursor:"pointer"}}onClick={e=>downloadPdf(`2021-${indexMonth+1}-${index+1}`)}>Download Register</a>
                                                 </span>
                                             </li>
                                         </ul>

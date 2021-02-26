@@ -11,7 +11,7 @@ import ReportLogs from './views/report_logs/ReportLogs';
 
 import List from "./views/DummyList";
 import Form from "./views/Form";
-import { BrowserRouter as Router, Route,Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route,Redirect ,withRouter} from "react-router-dom";
 import { UserProvider } from "./Context";
 import Settings from './views/settings/Settings'
 
@@ -33,11 +33,12 @@ function App(props) {
     axios(
       {
         method:'GET',
-        url: `http://127.0.0.1:8000/adminuser/hello/`,
+        url: `https://m2hut-backend.wantechsolutions.com/api/admin/profile/get`,
         headers:{
           Authorization:  `Bearer ${localStorage.getItem('access_token')}`
         }
     }).then((res)=>{
+      console.log('yes it is good')
       // var access =true
       // props.userAuthenticated({ access });
       setIsLoggedIn(true)
@@ -54,30 +55,22 @@ function App(props) {
       <header className="App-header">
       <Router>
       <UserProvider value={isLoggedIn}>
-      <Navbar/>
-        {!isLoggedIn?
-        <>
-        <Route exact path="/" component={User}/>
-        <Route path="/home" component={User}/>
 
-        <Redirect to='/home' />
-        </>
-         :
-         <>
-         <Route path="/" component={Login} />
-         <Redirect to='/' component={Login}/>
-         </>
+        {isLoggedIn?
+      
+        <Redirect to="/dashboard" />
 
-         }  
+        :<Redirect to='/login'/>}
+        <Route path="/dashboard" component={Home}/>
+        <Route path="/users" component={User}/>
+        <Route path="/data" component={ReportLogs}/>
+        <Route path="/notices" component={Notices}/>
+        <Route path="/settings" component={Settings}/>
+        <Route  exact path="/login" component={Login}/>
+        {/* <Redirect to='/login'/> */}
+
+
        
-
-          {/* <Login/> */}
-          {/* <Navbar/> */}
-          {/* <Notices/> */}
-          {/* <User/> */}
-          {/* <ReportLogs/> */}
-
-          {/* <Home/> */}
           </UserProvider>
       </Router>
       </header>
@@ -86,4 +79,4 @@ function App(props) {
   );
 }
 
-export default App;
+export default App

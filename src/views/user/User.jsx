@@ -12,6 +12,9 @@ import EditUser from './edit_user/EditUser';
 import ViewUser from './view_user/ViewUser';
 import CreateUser from './create_user/CreateUser';
 // import EditPost from './edit_post/EditPost'; 
+import placeholder from '../../assets/img/placeholder.png'
+import {data} from './data'
+import Navbar from '../../components/navbar/Navbar';
 
 function User() {
     useEffect(()=>{
@@ -36,6 +39,7 @@ function User() {
       zip:'',
       country:'',
       password:'',
+      image:placeholder,
 // ********************institute detail
       trainingInstitute:'',
       institutePhone:'',
@@ -44,67 +48,14 @@ function User() {
       instituteAddress:'',
       instituteCity:'',
       instituteZip:'',
+      instituteCountry:'',
 // **********************account status
       registerName:'',
       companyName:'',
-      accountStatus:''
+      accountStatus:false
       
     })
-    const [users, setUsers]=useState(
-      [
-        {
-          id:1,
-          user:'Asif',
-          contact:'04828294',
-          province:'punjab',
-
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:2,
-          
-          user:'marghoob',
-          contact:'04828294',
-          province:'punjab',
-
-
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:3,
-          user:'marghoob',
-          contact:'04828294',
-          province:'punjab',
-
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:4,
-         
-          user:'tarar',
-          contact:'04828294',
-          province:'kpk',
-
-
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-      
-      
-      ])
+    const [users, setUsers]=useState(data)
 
       const [userDescriptionData, setUserDescriptionData ] = useState({})
       const [viewUser, setViewUser] = useState(false)
@@ -129,6 +80,8 @@ function User() {
       }
       const viewUserData = e=>{
         setUserDescriptionData(e)
+        setUserData(e)
+        console.log(e)
         setAllUsers(false)
         setEditUser(false)
         setViewUser(true)
@@ -140,23 +93,40 @@ function User() {
         setNewUser(true)
       }
       const createUserData = e=>{
-        setUserData({...userData,[e.target.name]:e.target.value})
+        if(e.target.name !== 'accountStatus' && e.target.name!== 'image'){
+          setUserData({...userData,[e.target.name]:e.target.value})
+
+        }
+        else if(e.target.name ==='accountStatus'){
+          setUserData({...userData,[e.target.name]:!userData.accountStatus})
+
+        }
+        else if(e.target.name === 'image'){
+          // URL.createObjectURL(object)
+          setUserData({...userData,[e.target.name]:URL.createObjectURL(e.target.files[0])})
+
+
+        }
+        console.log(userData)
       }
 
   return (
   <div>
+    <Navbar/>
+
     {/* <div className="wrapper container d-flex align-items-stretch"> */}
       {/* <Sidebar nav_page={'Notices'} /> */}
       {allUsers?<AllUsers users={users}
               // deleteUser = {e=> deleteUser(e)}
               // editUser = {e=>editUserDataView(e)}
-              viewUser = {e => viewUserData()}
+              viewUser = {e => viewUserData(e)}
               createUser = { e => createUserView(e) }
               
               /> 
               :newUser?<CreateUser 
-                          createUserData= {e => createUserData(e) }/> 
-              :viewUser?<ViewUser/>:null}
+                          userData = {userData}
+                         createUserData= {e => createUserData(e) }/> 
+              :viewUser?<ViewUser userData = {userData}/>:null}
     </div>
   );
 }

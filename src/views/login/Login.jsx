@@ -27,26 +27,30 @@ function Login(props) {
   } = useContext(UserContext);
 
   useEffect(()=>{
-    console.log('check logged in ',logged_in)
-    // axios(
-    //   {
-    //     method:'GET',
-    //     url: `http://127.0.0.1:8000/adminuser/hello/`,
-    //     headers:{
-    //       Authorization:  `Bearer ${localStorage.getItem('access_token')}`
-    //     }
-    // }).then((res)=>{
-    //   setLoggedIn(true)
-    //   // var access =true
-    //   // props.userAuthenticated({ access });
-    //   // console.log('user has logged in',logged_in)
-    //   setIsLoggedIn(true)
+    // console.log('check logged in ',logged_in)
+    axios(
+      {
+        method:'GET',
+        url: `https://m2hut-backend.wantechsolutions.com/api/admin/profile/get`,
+        headers:{
+          Authorization:  `Bearer ${localStorage.getItem('access_token')}`
+        }
+    }).then((res)=>{
+      console.log(res.data)
+      setLoggedIn(true)
+      // var access =true
+      // props.userAuthenticated({ access });
+      // console.log('user has logged in',logged_in)
+      setIsLoggedIn(true)
       
       
-    // }).catch((err)=>{
+    }).catch((err)=>{
+      console.log(err)
      
-    //   setIsLoggedIn(false)
-    // }) 
+      setIsLoggedIn(false)
+      setLoggedIn(false)
+
+    }) 
   //  console.log(props.user_logged_in)
     var remember = localStorage.getItem('remember')
     if(remember){
@@ -92,7 +96,11 @@ function Login(props) {
 				Accept: "application/json",
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({email:'info@ceta.org.za',password:'12345678'}),
+			body: JSON.stringify(
+          {
+            email: credentials.email,
+            password:credentials.password
+          }),
 		})
 			.then((r) => r.json().then((data) => ({ status: r.status, body: data })))
 			.then( (myJson)=> {
@@ -161,7 +169,7 @@ function Login(props) {
   }
   return (
     <div className="container h-100" style={{marginTop:'10%'}}>
-      {isLoggedIn ? <Redirect to="/notices" /> : 
+      {isLoggedIn ? <Redirect to="/dashboard" /> : 
        <div className="d-flex justify-content-center align-items-center h-100">
        <div className="login-panel">
          <div className="row">

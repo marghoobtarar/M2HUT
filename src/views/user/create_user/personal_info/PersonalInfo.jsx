@@ -34,12 +34,16 @@ const progressBarClick = e =>{
 
   }
 }
-  
+const submitData = e=>{
+    e.preventDefault()
+   props.progressBtn(e)
+}  
+
       // *******************end function 
 
   return (
   
-                <form>
+                <form onSubmit={e=>submitData(e)}>
                 <div className="row">
                   <div className="col-xs-12 col-sm-9">
                     <div className="user-form-sec">
@@ -53,13 +57,13 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>First Name</label>
-                              <input type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="firstName"/>
+                              <input required type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="firstName" value={props.userData.firstName} name="firstName"/>
                             </div>
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>Second Name</label>
-                              <input type="text" className="form-control" onChange={e=>props.createUserData(e)} name="secondName"/>
+                              <input required type="text" className="form-control" onChange={e=>props.createUserData(e)} value={props.userData.secondName} name="secondName"/>
                             </div>
                           </div>
                         </div>
@@ -67,13 +71,13 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>IDENTITY NUMBER</label>
-                              <input type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="identityNumber"/>
+                              <input required type="text" className="form-control"onChange={e=>props.createUserData(e)} value={props.userData.identityNumber}  name="identityNumber"/>
                             </div>
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>PASSPORT NUMBER</label>
-                              <input type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="passport"/>
+                              <input required type="text" className="form-control"onChange={e=>props.createUserData(e)} value={props.userData.passport}  name="passport"/>
                             </div>
                           </div>
                         </div>
@@ -81,7 +85,9 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>GENDER</label>
-                              <select onChange={e=>props.createUserData(e)} defaultValue='Male' name="gender" className="custom-select">
+                              <select onChange={e=>props.createUserData(e)} defaultValue='' value={props.userData.gender}  name="gender" className="custom-select">
+                              <option value={''} >--Select--</option>
+
                                 <option value={'Male'} >Male</option>
                                 <option value={'Female'}>Female</option>
                                 <option value={'Other'}>Other</option>
@@ -91,7 +97,7 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>DATE OF BIRTH</label>
-                              <input onChange={e=>props.createUserData(e)} type="date" className="form-controls" name="dob" />
+                              <input required onChange={e=>props.createUserData(e)} type="date" className="form-controls" value={props.userData.dob}  name="dob" />
                             </div>
                           </div>
                         </div>
@@ -99,13 +105,13 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>PHONE NUMBER</label>
-                              <input type="text"onChange={e=>props.createUserData(e)} className="form-controls" name="phone" />
+                              <input required type="text"onChange={e=>props.createUserData(e)} className="form-controls"value={props.userData.phone}  name="phone" />
                             </div>
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>CELL PHONE</label>
-                              <input type="text" className="form-controls" onChange={e=>props.createUserData(e)} name="cell" />
+                              <input required type="text" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.cell} name="cell" />
                             </div>
                           </div>
                         </div>
@@ -113,7 +119,7 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>EMAIL ACCOUNT</label>
-                              <input type="email" className="form-controls" onChange={e=>props.createUserData(e)}  name="email" />
+                              <input required type="email" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.email} name="email" />
                             </div>
                           </div>
                         </div>
@@ -121,7 +127,7 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-12">
                             <div className="input-field">
                               <label>STREET ADDRESS</label>
-                              <input type="text" onChange={e=>props.createUserData(e)}className="form-controls" name="address" />
+                              <input required type="text" onChange={e=>props.createUserData(e)}className="form-controls" value={props.userData.address}  name="address" />
                             </div>
                           </div>
                         </div>
@@ -129,13 +135,13 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>CITY</label>
-                              <input type="text" className="form-controls"onChange={e=>props.createUserData(e)} name="city" />
+                              <input required type="text" className="form-controls"onChange={e=>props.createUserData(e)} value={props.userData.city}  name="city" />
                             </div>
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>ZIP CODE</label>
-                              <input type="text" className="form-controls" onChange={e=>props.createUserData(e)} name="zip" />
+                              <input required type="text" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.zip}  name="zip" />
                             </div>
                           </div>
                         </div>
@@ -143,7 +149,7 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>COUNTRY</label>
-                              <select onChange={e=>props.createUserData(e)} defaultValue='' name="country" className="custom-select">
+                              <select onChange={e=>props.createUserData(e)} defaultValue='' value={props.userData.country}  name="country" className="custom-select">
                                 <option value='' >--Select County--</option>
                                 <option value="volvo">Volvo</option>
                                 <option value="fiat">Fiat</option>
@@ -156,7 +162,7 @@ const progressBarClick = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
                               <label>ACCOUNT PASSWORD</label>
-                              <input type="password" className="form-controls" onChange={e=>props.createUserData(e)} name="password" />
+                              <input required type="password" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.password}  name="password" />
                             </div>
                           </div>
                         </div>
@@ -169,7 +175,7 @@ const progressBarClick = e =>{
                     </div>
                   </div>
                   {/* <div className="col-xs-12 col-sm-3"> */}
-                  <Profile propgressBtnComponent={<a onClick={e=> props.progressBtn(e)}style={{cursor:'pointer'}} className="btn btn-create ripple">Proceed</a>}/>
+                  <Profile image={props.userData.image} picChange={e=>props.createUserData(e)} propgressBtnComponent={<input style={{cursor:'pointer'}} className="btn btn-create ripple" type='submit' value={'Proceed'}/>}/>
 
                   {/* </div> */}
                 </div>

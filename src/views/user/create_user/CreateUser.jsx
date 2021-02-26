@@ -19,25 +19,37 @@ const [accountStatus, setAccountStatus] = useState(false)
 const [personalInfoView, setPersonalInfoView] = useState(true)
 const [educationalInfoView, setEducationalInfoView]=useState(false)
 const [accountStatusView, setAccountStatusView] = useState(false)
+const [formNumber, setFormNumber] = useState(1)
 // **************************end state variables
 
     // *******************all function 
 
 const progressBtn = e =>{
+
+console.log(personalInfoView, personalInfo)
+console.log(educationalInfoView, educationalInfo)
+console.log(accountStatusView, accountStatus)
+
+
   if(personalInfo && educationalInfo){
 
     setEducationalInfoView(false)
+    setPersonalInfoView(false)
+    
     setAccountStatus(true)
     setAccountStatusView(true)
+    setFormNumber(3)
     
   }
-  if(personalInfo){
+  else if(personalInfo){
     setEducationalInfo(true)
+    setPersonalInfo(true)
     setEducationalInfoView(true)
 
     setPersonalInfoView(false)
 
     setAccountStatusView(false)
+    setFormNumber(2)
     // setAccountStatus(true)
   }
  
@@ -48,21 +60,45 @@ const progressBtn = e =>{
   // }
 }
 const progressBarClick = e =>{
-  if(educationalInfo){
-    setAccountStatus(true)
-  }
-  else{
-    setEducationalInfo(true)
+  console.log(e)
+  if(e==='personalInfo' && formNumber >= 1){
+    setEducationalInfoView(false)
+    setEducationalInfo(false)
+    setAccountStatusView(false)
     setAccountStatus(false)
+    setPersonalInfoView(true)
+    setPersonalInfo(true)
 
   }
+  else if(e==='educationalInfo' && formNumber>1){
+
+    setAccountStatusView(false)
+    setAccountStatus(false)
+    setPersonalInfoView(false)
+    setEducationalInfoView(true)
+    setEducationalInfo(true)
+  }
+  else if(e==='accountInfo' && formNumber >2){
+
+    setPersonalInfoView(false)
+    setEducationalInfoView(false)
+    setEducationalInfo(false)
+    setAccountStatusView(true)
+    setAccountStatus(true)
+
+  }
+  
+}
+const completeBtn = e=>{
+
+  console.log('submit data',props.userData)
 }
   
       // *******************end function 
 
   return (
     <div className="wrapper container d-flex align-items-stretch">
-        <Sidebar/>  
+        <Sidebar nav_page={'Users'}/>  
         <div id="content" className="p-4 p-md-5 pt-5">
       
         <div className="main-content">
@@ -70,15 +106,15 @@ const progressBarClick = e =>{
               <div className="col-xs-12 col-md-1"></div>
               <div className="col-xs-12 col-md-11">
                 <ul id="progressbar">
-                    <li style={{cursor:'pointer'}} className="active">Personal Information</li>
-                    <li  style={{cursor:'pointer'}} className={educationalInfo || accountStatus?'active':''} >Educational information</li>
-                    <li style={{cursor:'pointer'}} className={accountStatus?'active':''}>Account Status</li>
+                    <li onClick={e=>progressBarClick('personalInfo')} style={{cursor:'pointer'}} className="active">Personal Information</li>
+                    <li onClick={e=>progressBarClick('educationalInfo')} style={{cursor:'pointer'}} className={educationalInfo || accountStatus?'active':''} >Educational information</li>
+                    <li onClick={e=>progressBarClick('accountInfo')} style={{cursor:'pointer'}} className={accountStatus?'active':''}>Account Status</li>
                 </ul>
 
-                {personalInfoView? <PersonalInfo  progressBtn={e=>progressBtn()} createUserData= {e => props.createUserData(e) }/>
+                {personalInfoView? <PersonalInfo userData = {props.userData}  progressBtn={e=>progressBtn()} createUserData= {e => props.createUserData(e) }/>
                 :
-                educationalInfoView?<EducationalInfo progressBtn={e=>progressBtn()} createUserData= {e => props.createUserData(e) }/>:
-                accountStatusView? <AccountStatus progressBtn={e=>progressBtn()} createUserData= {e => props.createUserData(e) }/>:null
+                educationalInfoView?<EducationalInfo userData = {props.userData} progressBtn={e=>progressBtn()} createUserData= {e => props.createUserData(e) }/>:
+                accountStatusView? <AccountStatus userData = {props.userData} completeBtn={e=>completeBtn()} createUserData= {e => props.createUserData(e) }/>:null
 
           }       
 

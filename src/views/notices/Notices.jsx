@@ -10,6 +10,7 @@ import DetailNotices from './detail_notices/DetailNotices';
 import blog from '../../assets/img/Icon/blog.jpg';
 import EditPost from './edit_post/EditPost';
 import Footer from '../../components/footer/Footer'
+import Navbar from '../../components/navbar/Navbar';
 
 function Notices(props) {
   
@@ -369,6 +370,7 @@ function Notices(props) {
       }
   return (
   <div>
+    <Navbar/>
     <div className="wrapper container d-flex align-items-stretch">
       <Sidebar nav_page={'Notices'} />
       {allPost?<AllNotices notices={notices}

@@ -4,7 +4,8 @@ import styles from './styles'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import logo from '../../assets/img/Icon/logo.jpg'
-import logout from '../../assets/img/login-nav.png'
+import logoutImage from '../../assets/img/login-nav.png'
+import { Redirect } from 'react-router-dom';
 
 
 // import logo from '../assets/img/logo.png'
@@ -14,11 +15,15 @@ function Navbar() {
     useEffect(()=>{
 
     },[])
-   
-
+    const [logout, setLogout] = useState(false)
+    const logoutUser = e=>{
+      localStorage.removeItem('access_token')
+      setLogout(true)
+    }
   return (
   <div>
     <header className="custom-header">
+      {logout?<Redirect to='login'/>:null}
       <div className="container">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="#"><img src={logo} alt="icon" /></a>
@@ -33,7 +38,12 @@ function Navbar() {
                 </form>
                 <ul className="navbar-nav ml-3">
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Login <span className="mr-1"><img src={logout} alt="image" width="25px" /></span></a>
+                        <a style={{cursor:'pointer'}} className="nav-link" onClick={e=>logoutUser(e)}>
+                          Logout
+                          <span className="mr-1">
+                            <img src={logoutImage} alt="image" width="25px" />
+                          </span>
+                        </a>
                     </li>
                 </ul>
             </div>

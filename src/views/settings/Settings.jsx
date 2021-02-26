@@ -18,6 +18,8 @@ function Settings(props) {
    
    
   return (
+    <>
+    <Navbar/>
     <div className="wrapper container d-flex align-items-stretch">
         <Sidebar nav_page={'Settings'}/>
     <div id="content" className="p-4 p-md-5 pt-5">
@@ -34,6 +36,7 @@ function Settings(props) {
       </div>
     </div>
     </div>
+    </>
       );
 }
 Settings.propTypes = {

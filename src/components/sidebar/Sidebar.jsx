@@ -11,6 +11,7 @@ import settings from '../../assets/img/Icon/settings.png'
 
 import notices from '../../assets/img/Icon/download.png'
 import supportBtn from '../../assets/img/support_btn.png'
+import { Redirect } from 'react-router-dom';
 
 
 function AllNotices(props) {
@@ -19,10 +20,14 @@ function AllNotices(props) {
     },[])
     const [name, setName]=useState('Richard motlogan')
     const [email, setEmail] = useState('richard@gmail.com')
-
+    const [path , setPath] = useState("")
    
   return (
 	  <nav id="sidebar">
+      {path !== "" && window.location.pathname !== path ? (
+        <Redirect to={path} />
+      ) : null}
+      {/* <Redirect to={nav}/> */}
         <div className="custom-menu">
           <button type="button" id="sidebarCollapse" className="btn btn-primary d-none">
             <i className="fa fa-bars"></i>
@@ -39,23 +44,23 @@ function AllNotices(props) {
         <div className="nav_tab">
           <ul className="list-unstyled components mb-5">
             <li className={props.nav_page==='Dashboard'?'active':''}>
-              <a href="#"><span><img src={dashboard} width="15px" alt="icon" /></span>Dashboard</a>
+              <a style={{cursor:'pointer'}} onClick={e=>setPath('/dashboard')}><span><img src={dashboard} width="15px" alt="icon" /></span>Dashboard</a>
             </li>
             <li className={props.nav_page==='Users'?'active':''}> 
-                <a href="#"><span><img src={register} width="15px" alt="icon" /></span>Users</a>
+                <a style={{cursor:'pointer'}} onClick={e=>setPath('/users')}><span><img src={register} width="15px" alt="icon" /></span>Users</a>
             </li>
            
             <li className={props.nav_page==='Data'?'active':''}>
-              <a href="#"><span><img src={data} width="15px" alt="icon" /></span>Data</a>
+              <a style={{cursor:'pointer'}} onClick={e=>setPath('/data')}><span><img src={data} width="15px" alt="icon" /></span>Data</a>
             </li>
             <li  className={props.nav_page==='Notices'?'active':''}>
-              <a href="#"><span><img src={notices} width="15px" alt="icon" /></span>Notices</a>
+              <a style={{cursor:'pointer'}} onClick={e=>setPath('/notices')}><span><img src={notices} width="15px" alt="icon" /></span>Notices</a>
             </li>
             <li  className={props.nav_page==='Settings'?'active':''}>
-              <a href="#"><span><img src={settings} width="15px" alt="icon" /></span>Settings</a>
+              <a style={{cursor:'pointer'}} onClick={e=>setPath('/settings')}><span><img src={settings} width="15px" alt="icon" /></span>Settings</a>
             </li>
             <li className="support_btn">
-              <a href="#" ><span><img src={supportBtn} alt="btn"/></span></a>
+              <a style={{cursor:'pointer'}} href="#" ><span><img src={supportBtn} alt="btn"/></span></a>
             </li>
           </ul>
         </div>

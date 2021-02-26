@@ -8,35 +8,22 @@ function AccountStatus(props) {
     useEffect(()=>{
     },[])
 //  **************************all state variables
-const [educationalInfo, setEducationalInfo]=useState(false)
-const [accountStatus, setAccountStatus] = useState(false)
-// **************************end state variables
+const submitData = e=>{
+    e.preventDefault()
+   props.completeBtn(e)
+}  
 
-    // *******************all function 
-
-const progressBtn = e =>{
-  if(educationalInfo){
-    setAccountStatus(true)
-  }
-  else{
-    setEducationalInfo(true)
-    setAccountStatus(false)
-
-  }
-}
   return (
   
-                <form>
+                <form onSubmit={e=>submitData(e)}>
                 <div className="row">
                   <div className="col-xs-12 col-sm-9">
                     <div className="user-form-sec">
-   
-                
                      <div className="row">
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>register name</label>
-                              <input type="text" className="form-control" onChange={e=>props.createUserData(e)} name="registerName"/>
+                              <input required type="text" className="form-control" onChange={e=>props.createUserData(e)} value={props.userData['registerName']} name="registerName"/>
                             </div>
                           </div>
                         </div>
@@ -44,7 +31,7 @@ const progressBtn = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>company name</label>
-                              <input type="text" className="form-control" onChange={e=>props.createUserData(e)} name="companyName"/>
+                              <input required type="text" className="form-control" onChange={e=>props.createUserData(e)}value={props.userData.companyName}  name="companyName"/>
                             </div>
                           </div>
                         </div>
@@ -52,7 +39,7 @@ const progressBtn = e =>{
                           <div className="col-xs-12 col-sm-6">
                             <label>Account status</label>
                             <label className="switch">
-                              <input type="checkbox" id="togBtn" onChange={e=>props.createUserData(e)} name='accountStatus' />
+                              <input type="checkbox" id="togBtn" onChange={e=>props.createUserData(e)}checked={props.userData.accountStatus} name='accountStatus' />
                               <div className="slider round"></div>
                             </label>
                           </div>
@@ -62,7 +49,7 @@ const progressBtn = e =>{
                     </div>
                   </div>
                   {/* <div className="col-xs-12 col-sm-3"> */}
-                  <Profile propgressBtnComponent={<a onClick={e=> props.progressBtn(e)}style={{cursor:'pointer'}} className="btn btn-create ripple">Proceed</a>}/>
+                  <Profile image={props.userData.image} picChange={e=>props.createUserData(e)} propgressBtnComponent={<input type='submit'style={{cursor:'pointer'}} className="btn btn-create ripple" value={'Complete'}/>}/>
 
                   {/* </div> */}
                 </div>

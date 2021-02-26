@@ -23,11 +23,11 @@ function AccountStatus(props) {
                     <div className="user-img-uplod p-reletive">
                       <strong>Profile Picture</strong>
                       <div className="profile_holder">
-                        <img src={image} className="mr-auto ml-auto" alt="image"/>
+                        <img src={props.image} className="mr-auto ml-auto" style={{width:'150px', height:'150px'}} alt="image"/>
                       </div>
                       <div className="upload-btn-wrapper">
                         <button className="btn">Choose picture</button>
-                        <input type="file" name="myfile"/>
+                        <input type="file" onChange={e=>props.picChange(e)} name="image"/>
                       </div>
                      {props.propgressBtnComponent}
                       {/* <a onClick={e=> progressBtn(e)}style={{cursor:'pointer'}} className="btn btn-create ripple">Proceed</a> */}

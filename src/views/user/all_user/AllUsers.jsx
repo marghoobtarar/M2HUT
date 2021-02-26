@@ -31,7 +31,7 @@ function AllUsers(props) {
       
       
      <div className="wrapper container d-flex align-items-stretch">
-     <Sidebar nav_page={'User'} />
+     <Sidebar nav_page={'Users'} />
 
       <div id="content" className="p-4 p-md-5 pt-5">
         <div className="main-content">
@@ -59,10 +59,10 @@ function AllUsers(props) {
                   {
                     props.users.map(function (data,index) 
                      { return<tr key={index}>
-                              <th>{data.user}</th>
-                              <td>{data.id}</td>
-                              <td>{data.contact}</td>
-                              <td>{data.province}</td>
+                              <th>{data.firstName}</th>
+                              <td>{data.identityNumber}</td>
+                              <td>{data.cell}</td>
+                              <td>{data.city}</td>
                               <td>
                                 <div className="d-block">
                                   <a onClick={e=> props.viewUser(data)} style={{cursor:'pointer'}}><i className="fa fa-eye" aria-hidden="true"></i></a>
