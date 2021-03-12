@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import axios from 'axios'
 ClassicEditor
     .create( document.querySelector( '#editor' ), {
         image: {
@@ -15,30 +15,108 @@ ClassicEditor
 function Suspension(props) {
     useEffect(()=>{
 
+      axios({method : 'GET',
+      url : `http://127.0.0.1:8000/adminuser/suspend_email/`,
+      headers : {
+          Authorization : `Bearer ${localStorage.getItem('access_token')}`,
+      },
+
+        }).then(res=>{
+          if(res.data.suspend_email.length>0)
+          {  
+            console.log(res.data.suspend_email[0])
+            setSuspend(res.data.suspend_email[0])
+            setId(res.data.suspend_email[0].id)
+            setUpdate(true)
+          }
+          else{
+            setSuspend(
+              {  
+                heading:'',
+                description:''}
+              )
+
+          }
+          
+
+
+            
+        }).catch(err=>{
+            console.log(err)
+        })
+
     },[])
-    const [suspension , setSuspension] = useState({heading:'',description:''})
+    const handleEditorChange = (content, editor) => {
+      console.log('Content was updated:', content);
+    }
+    const [id, setId] = useState()
+    const [isUpdate, setUpdate] = useState(false)
+    const [suspend , setSuspend] = useState({ })
     const updateForm = (e)=> {
-      setSuspension({...suspension,[e.target.name]:e.target.value})
+      console.log(suspend.id)
+      setSuspend({...suspend,[e.target.name]:e.target.value})
     }
    
    const submitForm = e=>{
      e.preventDefault()
-     
+     console.log('registration data is here',suspend)
+     if(!isUpdate){
+      axios({method : 'POST',
+      url : `http://127.0.0.1:8000/adminuser/suspend_email/`,
+      headers : {
+          Authorization : `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      data : suspend
+
+        }).then(res=>{
+            console.log(res)
+            setSuspend(res.data.suspend_email)
+            // setDataPosted(true)
+
+            
+        }).catch(err=>{
+            console.log(err)
+        })
+     }
+     else{
+       console.log(suspend)
+      axios({method : 'PUT',
+      url : `http://127.0.0.1:8000/adminuser/manage_suspend_email/${id}/`,
+      headers : {
+          Authorization : `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      data : suspend
+
+        }).then(res=>{
+            console.log(res.data)
+            setSuspend(res.data)
+            // setDataPosted(true)
+
+            
+        }).catch(err=>{
+            console.log(err)
+        })
+     }
 
    }
-  
+  //  function createMarkup() {
+  //   return {__html: registration.description};
+  // }
   return (
     <>
     <form onSubmit={e=>submitForm(e)}>
       <div className="reglable">
-         <input type="text" id=""value={suspension.heading} onChange={e=>updateForm(e)} name="heading" placeholder="your CETA account suspended"/><br/>
+         <input type="text" id=""value={suspend.heading} onChange={e=>updateForm(e)} name="heading" placeholder="Your CETA account suspended"/><br/>
       </div>
       <div className="textbox" style={{marginTop:'20px'}}>
-       
+   
        <CKEditor
 
           editor={ ClassicEditor }
+          // data="<p>Hello from CKEditor 5!</p>"
 
+          data = {suspend.description}
+          // onChange={ ( event, editor ) => console.log( { event, editor } ) }
           onReady = {editor => {
             //initilize our application
           }}
@@ -46,18 +124,32 @@ function Suspension(props) {
             {
               ckfinder: {
             // Upload the images to the server using the CKFinder QuickUpload command.
-            uploadUrl: 'http://localhost:8000/uploads'
+                 uploadUrl: `http://127.0.0.1:8000/adminuser/ckeditor_image/`
               }
             }
           }
-         
+          // onInit={ editor => {
+          //     // You can store the "editor" and use when it is needed.
+          //     console.log( 'Editor is ready to use!', editor );
+          // } }
           onChange={ ( event, editor ) => {
             console.log( { event, editor } )
               const data = editor.getData();
-              setSuspension({...suspension,['description']:data})
+              setSuspend({...suspend,['description']:data})
               
+              
+              // console.log(registration)
+              //this.state.handleWYSIWYGInput(this.props.id, data);
+              console.log( { event, editor, data } );
+              // console.log(this.state.content);
           } }
-        
+          // onBlur={ editor => {
+          //     console.log( 'Blur.', editor );
+          // } }
+          // onFocus={ editor => {
+          //     console.log( 'Focus.', editor );
+          // } }
+          // UploadAdapter={FileRepository}
       />
       </div>
 
@@ -65,6 +157,7 @@ function Suspension(props) {
         <input type='submit' className="btn" value={'Update'} />
       </div>
      
+      {/* <div dangerouslySetInnerHTML={createMarkup()} /> */}
 
     </form>
     

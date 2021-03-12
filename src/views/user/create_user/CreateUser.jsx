@@ -8,6 +8,7 @@ import Profile from './profile/Profile';
 import PersonalInfo from './personal_info/PersonalInfo';
 import EducationalInfo from './educational_info/EducationalInfo';
 import AccountStatus from './account_status/AccountStatus';
+import Footer from '../../../components/footer/Footer';
 function EditUser(props) {
     useEffect(()=>{
     },[])
@@ -26,9 +27,9 @@ const [formNumber, setFormNumber] = useState(1)
 
 const progressBtn = e =>{
 
-console.log(personalInfoView, personalInfo)
-console.log(educationalInfoView, educationalInfo)
-console.log(accountStatusView, accountStatus)
+// console.log(personalInfoView, personalInfo)
+// console.log(educationalInfoView, educationalInfo)
+// console.log(accountStatusView, accountStatus)
 
 
   if(personalInfo && educationalInfo){
@@ -92,6 +93,7 @@ const progressBarClick = e =>{
 const completeBtn = e=>{
 
   console.log('submit data',props.userData)
+  props.submitUser(e)
 }
   
       // *******************end function 
@@ -120,6 +122,7 @@ const completeBtn = e=>{
 
                </div>
           </div>
+          <Footer/>
         </div>
 
 

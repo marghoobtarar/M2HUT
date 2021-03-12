@@ -22,18 +22,14 @@ function Navbar() {
     },[])
 
   return (
-    <div className="wrapper container d-flex align-items-stretch">
-      {!logged_in? <Redirect to='/'/>:null}
-        <div id="" className="p-4 p-md-5 pt-5">
-
+   
             <div className="footer ">
                 <ul className="d-flex list-none justify-content-between">
                     <li><a href="#"><img src={footer} alt="image" /></a></li>
                     <li><small>© M2Engineering, South Africa</small></li>
                 </ul>
             </div>
-        </div>
-    </div>
+       
   );
 }
 Navbar.propTypes = {

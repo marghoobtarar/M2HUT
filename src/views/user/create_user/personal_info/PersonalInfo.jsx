@@ -57,13 +57,13 @@ const submitData = e=>{
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>First Name</label>
-                              <input required type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="firstName" value={props.userData.firstName} name="firstName"/>
+                              <input required type="text" className="form-control"onChange={e=>props.createUserData(e)}  name="first_name" value={props.userData.first_name} name="first_name"/>
                             </div>
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>Second Name</label>
-                              <input required type="text" className="form-control" onChange={e=>props.createUserData(e)} value={props.userData.secondName} name="secondName"/>
+                              <input required type="text" className="form-control" onChange={e=>props.createUserData(e)} value={props.userData.last_name} name="last_name"/>
                             </div>
                           </div>
                         </div>
@@ -140,21 +140,25 @@ const submitData = e=>{
                           </div>
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
-                              <label>ZIP CODE</label>
-                              <input required type="text" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.zip}  name="zip" />
+                              <label>Zip CODE</label>
+                              <input required type="text" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.zip_code}  name="zip_code" />
                             </div>
                           </div>
                         </div>
                         <div className="row">
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-field">
-                              <label>COUNTRY</label>
+                              <label> Country </label>
+                              <input required type="text" className="form-controls" onChange={e=>props.createUserData(e)} value={props.userData.country}  name="country" />
+                              {/* <label>COUNTRY</label>
                               <select onChange={e=>props.createUserData(e)} defaultValue='' value={props.userData.country}  name="country" className="custom-select">
                                 <option value='' >--Select County--</option>
                                 <option value="volvo">Volvo</option>
                                 <option value="fiat">Fiat</option>
                                 <option value="audi">Audi</option>
-                              </select>
+                              </select> */}
+
+
                             </div>
                           </div>
                         </div>

@@ -3,6 +3,7 @@ import React,{useState,useEffect} from 'react';
 import styles from './styles'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import Footer from '../../../components/footer/Footer';
 
 function EditPost(props) {
     useEffect(()=>{
@@ -39,7 +40,7 @@ console.log('editpost.js',props.data)
             <div className="row">
               <div className="col-xs-12 col-sm-8">
                 <div className="input-field">
-                  <textarea onChange={e=>dataChange(e)} value={props.data.heading} type="text" className="form-controls" placeholder="Post text goes here" name="description"></textarea>
+                  <textarea onChange={e=>dataChange(e)} value={props.data.description} type="text" className="form-controls" placeholder="Post text goes here" name="description"></textarea>
                 </div>
                 <div className="row">
                   <div className="col-xs-12 col-sm-6">
@@ -57,7 +58,9 @@ console.log('editpost.js',props.data)
               </div>
               <div className="col-xs-12 col-sm-4">
                 <div className="blog-holder">
-                  <img src={props.data.image} alt="image" />
+                  {console.log('image here',props.image)}
+                  {props.image === null? <img src={`http://127.0.0.1:8000${props.data.image}`} alt="image" />
+                    : <img src={`${props.data.image}`} alt="image" /> }
                 </div>
                 <div  className="profile_name mb-2">
                   <div className="upload-btn-wrapper">
@@ -83,6 +86,7 @@ console.log('editpost.js',props.data)
               </div>
             </div>
           </div>
+          <Footer/>
         </div>
        
       </div>

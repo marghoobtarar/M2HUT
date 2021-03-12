@@ -6,12 +6,15 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import addUser from '../../../assets/img/add-icon.png'
 import imagePlaceholder from '../../../assets/img/placeholder.png'
+import Footer from '../../../components/footer/Footer';
+import axios from 'axios'
+import { Redirect } from 'react-router-dom';
 function CreateNotices(props) {
     useEffect(()=>{
 
     },[])
 //  **************************all state variables
-
+const [noticeCreated, setNoticeCreated] = useState(false)
 const [data, setData] = useState(
                 {
                   heading:'',
@@ -22,6 +25,8 @@ const [data, setData] = useState(
                   date:''
                   })
 
+// 
+const [image, setImage] = useState()
 // **************************end state variables
 
     // *******************all function 
@@ -39,15 +44,49 @@ const [data, setData] = useState(
       }
       else{
         setData({...data,[e.target.name]:URL.createObjectURL(e.target.files[0])})
-
+        setImage(e.target.files[0])
       }
 
     }
 
       // *******************end function 
+const submitPost = e => {
+e.preventDefault()
+let formData = new FormData();
 
+formData.append('heading', data.heading);   //append the values with key, value pair
+if(image!==undefined ){
+  formData.append('image', image);
+
+}
+formData.append('draft', data.draft);
+formData.append('publish', data.publish);
+formData.append('description', data.description);
+formData.append('date', data.date);
+formData.append('author', 'CETA Administrator');
+
+console.log('this is the image', image)
+
+axios({method:'POST', 
+      url:`http://127.0.0.1:8000/adminuser/notices/`,
+      data: formData,
+      headers:{
+          Authorization:  `Bearer ${localStorage.getItem('access_token')}`,
+          'content-type': 'multipart/form-data'
+        }
+      })
+    .then(response => {
+        console.log(response);
+        // setNoticeCreated(true)
+        props.noticeCreated()
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
   return (
     <div className="wrapper container d-flex align-items-stretch">
+      {noticeCreated?<Redirect to='/notices'/>:null}
       <div id="content" className="p-4 p-md-5 pt-5">
         <div className="main-content">
           <div className="row">
@@ -77,7 +116,7 @@ const [data, setData] = useState(
                   </div>
                   <div className="col-xs-12 col-sm-6">
                     <div className="input-field">
-                      <input onChange={e=>creatingPost(e)} type="text" className="form-controls" placeholder="Date Published" name="date" />
+                      <input onChange={e=>creatingPost(e)} type="date" value={data.date} className="form-controls" placeholder="Date Published" name="date" />
                     </div>
                   </div>
                 </div>
@@ -100,10 +139,11 @@ const [data, setData] = useState(
                   <input onChange={e=>creatingPost(e)} type="checkbox" className="custom-control-input mt-1" id="customCheck2" name="publish"/>
                   <label className="custom-control-label" htmlFor="customCheck2">Publish Post</label>
                 </div>
-                <a href="#" className="confirm-btn"><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Confirm</a>
+                <a style={{cursor:'pointer'}} onClick={e=>submitPost(e)} className="confirm-btn"><i className="fa fa-pencil-square-o" aria-hidden="true"></i> Confirm</a>
               </div>
             </div>
           </div>
+          <Footer/>
         </div>
        
       </div>

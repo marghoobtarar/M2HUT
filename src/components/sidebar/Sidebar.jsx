@@ -7,7 +7,7 @@ import userImage from '../../assets/img/take-img.png'
 import dashboard from '../../assets/img/Icon/dashboard.png'
 import register from '../../assets/img/Icon/user.png'
 import data from '../../assets/img/Icon/file.png'
-import settings from '../../assets/img/Icon/settings.png'
+import settings from '../../assets/img/Icon/setting.png'
 
 import notices from '../../assets/img/Icon/download.png'
 import supportBtn from '../../assets/img/support_btn.png'
@@ -60,7 +60,7 @@ function AllNotices(props) {
               <a style={{cursor:'pointer'}} onClick={e=>setPath('/settings')}><span><img src={settings} width="15px" alt="icon" /></span>Settings</a>
             </li>
             <li className="support_btn">
-              <a style={{cursor:'pointer'}} href="#" ><span><img src={supportBtn} alt="btn"/></span></a>
+              <a style={{cursor:'pointer'}} href="https://www.mwportal.co.za/index.php" target="_blank" ><span><img src={supportBtn} alt="btn"/></span></a>
             </li>
           </ul>
         </div>

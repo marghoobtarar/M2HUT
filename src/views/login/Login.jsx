@@ -8,6 +8,7 @@ import logo from '../../assets/img/logo.png'
 import {Redirect} from 'react-router-dom'
 import { connect } from "react-redux";
 import UserContext from "../../Context";
+import Footer from '../../components/footer/Footer';
 
 // import { addArticle ,userAuthenticated} from "../../js/actions/index";
 
@@ -31,7 +32,7 @@ function Login(props) {
     axios(
       {
         method:'GET',
-        url: `https://m2hut-backend.wantechsolutions.com/api/admin/profile/get`,
+        url: `http://127.0.0.1:8000/userAuth/manage_user/`,
         headers:{
           Authorization:  `Bearer ${localStorage.getItem('access_token')}`
         }
@@ -88,34 +89,33 @@ function Login(props) {
       localStorage.removeItem('password')
       localStorage.removeItem('remember')
     }
-    var payload = {email:credentials.email,password:credentials.password}
-    console.log(payload)
-    fetch("https://m2hut-backend.wantechsolutions.com/api/admin/authenticate", {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(
-          {
-            email: credentials.email,
-            password:credentials.password
-          }),
-		})
-			.then((r) => r.json().then((data) => ({ status: r.status, body: data })))
-			.then( (myJson)=> {
+    var payload = { 
+      email:credentials.email,
+      password:credentials.password
+    }
+  
+    axios
+    .post(`http://127.0.0.1:8000/user/authenticate/`, payload)
+    .then(res=>{
+      localStorage.setItem('access_token',res.data.access_token)
+      setLoggedIn(true)
+      setIsLoggedIn(true)
+    })
+			// .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
+			// .then( (myJson)=> {
 
-        // props.addArticle({ 'sddsj' });
-        // var access =true
-        localStorage.setItem('access_token',myJson.body.access_token)
-        // props.userAuthenticated({ access });
-        setLoggedIn(true)
-        setIsLoggedIn(true)
-        // console.log(access)
+      //   // props.addArticle({ 'sddsj' });
+      //   // var access =true
+      //   localStorage.setItem('access_token',myJson.body.access_token)
+      //   // props.userAuthenticated({ access });
+      //   setLoggedIn(true)
+      //   setIsLoggedIn(true)
+      //   // console.log(access)
         
-			})
+			// })
 			.catch((error) => {
 				console.log(error)
+        alert('Error occured in login.')
 			})
       //  fetch(`https://m2hut-backend.wantechsolutions.com/api/authenticate/`,
       //  {
@@ -168,7 +168,8 @@ function Login(props) {
     // })
   }
   return (
-    <div className="container h-100" style={{marginTop:'10%'}}>
+    <>
+    <div className="container h-100" style={{marginTop:'7.5%'}}>
       {isLoggedIn ? <Redirect to="/dashboard" /> : 
        <div className="d-flex justify-content-center align-items-center h-100">
        <div className="login-panel">
@@ -229,7 +230,10 @@ function Login(props) {
      </div>
   
       }
+     <Footer/>
     </div>
+ 
+    </>
   );
 }
 Login.propTypes = {

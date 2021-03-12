@@ -3,6 +3,7 @@ import React,{useState,useEffect} from 'react';
 import styles from './styles'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import Footer from '../../../components/footer/Footer';
 // import footer from '../../assets/img/M2hut-logo.png'
 
 // import logo from '../assets/img/logo.png'
@@ -32,7 +33,7 @@ function DetailNotices(props) {
                     Edit Post
                     </a>
 
-                <img src={props.data.image} alt="blog" />
+                <img src={`http://127.0.0.1:8000${props.data.image}`} alt="blog" />
                 <strong>Date Pulished</strong>
                 <small>{props.data.date}</small>
                 <strong>Author</strong>
@@ -46,6 +47,7 @@ function DetailNotices(props) {
               </div>
             </div>
           </div>
+          <Footer/>
         </div>
         
       </div>

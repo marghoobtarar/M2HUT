@@ -11,310 +11,36 @@ import blog from '../../assets/img/Icon/blog.jpg';
 import EditPost from './edit_post/EditPost';
 import Footer from '../../components/footer/Footer'
 import Navbar from '../../components/navbar/Navbar';
-
+import axios from 'axios'
 function Notices(props) {
   
     useEffect(()=>{
 
+      axios({method:'GET', 
+      url:`http://127.0.0.1:8000/adminuser/notices/`,
+      headers:{
+          Authorization:  `Bearer ${localStorage.getItem('access_token')}`,
+          'content-type': 'multipart/form-data'
+        }
+      })
+    .then(response => {
+      setNotices(response.data.notices)
+        // console.log(response.data.notices);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
     },[])
     //******************************** all state variables
-    const [notices, setNotices]=useState(
-      [
-        {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:2,
-          date:'12/01/2022',
-          author:'Naeem',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:3,
-          date:'12/01/2023',
-          author:'Naeem',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:4,
-          date:'12/01/2024',
-          author:'marghoob',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:5,
-          date:'12/01/2024',
-          author:'marghoob',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:6,
-          date:'12/01/2024',
-          author:'marghoob ahmad',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:7,
-          date:'12/01/2024',
-          author:'marghoob tarar',
-          image:blog,
-          draft:true,
-          publish:true,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-        {
-          id:8,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:9,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:10,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:11,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:12,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:13,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:14,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:15,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:16,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:17,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:18,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        }, {
-          id:1,
-          date:'12/01/2021',
-          author:'Asif',
-          image:blog,
-          draft:true,
-          publish:false,
-          heading:'Department of Transport issues 100 employees with an updated work relations mandate.',
-          description:'The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff The department of Transport DG has signed a new set of workplace conducts to make the workplace more safe for all the staff'
-        },
-
-      
-      ])
+    const [notices, setNotices]=useState([])
 
       const [postDescription, setPostDescription ] = useState(false)
       const [editPost, setEditPost ] = useState(false)
       const [newPost, setNewPost ] = useState(false)
       const [allPost, setAllPost ] = useState(true)
       const[selectedPostDescription, setSelectedPostDescription] = useState({})
-
+      const [image ,setImage] = useState(null)
 
       // *******************   end variables *************************
 
@@ -357,16 +83,87 @@ function Notices(props) {
         }
         else{
           setSelectedPostDescription({...selectedPostDescription,[e.target.name]:URL.createObjectURL(e.target.files[0])})
-
+          setImage(e.target.files[0])
         }
         console.log(selectedPostDescription)
 
       }
       const submitEditData = e=> {
         // submit the post request
-        console.log('submit data here and replace the data ')
-         setEditPost(false)
-         setAllPost(true)
+
+        let formData = new FormData();
+
+        formData.append('heading', selectedPostDescription.heading);   //append the values with key, value pair
+        if(image!==null ){
+          formData.append('image', image);
+        
+        }
+        formData.append('draft', selectedPostDescription.draft);
+        formData.append('publish', selectedPostDescription.publish);
+        formData.append('description', selectedPostDescription.description);
+        formData.append('date', selectedPostDescription.date);
+        formData.append('author', 'CETA Administrator');
+        
+        console.log('this is the image', image)
+        
+        axios({method:'PUT', 
+              url:`http://127.0.0.1:8000/adminuser/manage_notices/${selectedPostDescription.id}/`,
+              data: formData,
+              headers:{
+                  Authorization:  `Bearer ${localStorage.getItem('access_token')}`,
+                  'content-type': 'multipart/form-data'
+                }
+              })
+            .then(response => {
+                console.log(response);
+                // setNoticeCreated(true)
+                // props.noticeCreated()
+                setEditPost(false)
+                setAllPost(true)
+                setImage(null)
+                axios({method:'GET', 
+                url:`http://127.0.0.1:8000/adminuser/notices/`,
+                headers:{
+                    Authorization:  `Bearer ${localStorage.getItem('access_token')}`,
+                    'content-type': 'multipart/form-data'
+                  }
+                })
+              .then(response => {
+                setNotices(response.data.notices)
+                  // console.log(response.data.notices);
+              })
+              .catch(error => {
+                  console.log(error);
+              });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+
+        console.log('submit data here and replace the data ',selectedPostDescription)
+         
+      }
+      const noticeCreated = e =>{
+        // console.log('notices created in notice.js')
+
+        axios({method:'GET', 
+      url:`http://127.0.0.1:8000/adminuser/notices/`,
+      headers:{
+          Authorization:  `Bearer ${localStorage.getItem('access_token')}`,
+          'content-type': 'multipart/form-data'
+        }
+      })
+    .then(response => {
+      setNotices(response.data.notices)
+        // console.log(response.data.notices);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+        setNewPost(false)
+        setAllPost(true)
       }
   return (
   <div>
@@ -382,7 +179,8 @@ function Notices(props) {
               : newPost?
                 <CreateNotices 
                 postDescription = {e => viewPostDescription(e)}
-                newPost = {e => createNewPost(e)}
+                newPost = {e => createNewPost(e)} 
+                noticeCreated = {e=>noticeCreated(e)}
                 />:
                 postDescription?
                     <DetailNotices data={selectedPostDescription} editPost = {e => editOldPost(e)}/>
@@ -391,13 +189,13 @@ function Notices(props) {
                       <EditPost data={selectedPostDescription} 
                           setChangeData ={e => editingPost(e)} 
                           SubmitData = {e => submitEditData(e)}
+                          image = {image}
                           />:null
 
     }
 
       
     </div>
-    <Footer/>
 
     </div>
   );

@@ -1,26 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/static/js/main.b4ded6a5.chunk.js",
-    "main.js.map": "/static/js/main.b4ded6a5.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.5a0eb0d4.js",
-    "runtime-main.js.map": "/static/js/runtime-main.5a0eb0d4.js.map",
-    "static/js/2.a240f954.chunk.js": "/static/js/2.a240f954.chunk.js",
-    "static/js/2.a240f954.chunk.js.map": "/static/js/2.a240f954.chunk.js.map",
-    "static/js/3.53cb332a.chunk.js": "/static/js/3.53cb332a.chunk.js",
-    "static/js/3.53cb332a.chunk.js.map": "/static/js/3.53cb332a.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.6dea0f05.chunk.css.map": "/static/css/main.6dea0f05.chunk.css.map",
-    "static/js/2.a240f954.chunk.js.LICENSE.txt": "/static/js/2.a240f954.chunk.js.LICENSE.txt",
-    "static/media/blog.b44dc68a.jpg": "/static/media/blog.b44dc68a.jpg",
-    "static/media/login.8245b66f.jpg": "/static/media/login.8245b66f.jpg",
-    "static/media/logo.abb5066c.png": "/static/media/logo.abb5066c.png",
-    "static/media/take-img.1e57af8e.png": "/static/media/take-img.1e57af8e.png"
+    "main.css": "./static/css/main.6dea0f05.chunk.css",
+    "main.js": "./static/js/main.ab2796df.chunk.js",
+    "main.js.map": "./static/js/main.ab2796df.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.d5ecaa3b.js",
+    "runtime-main.js.map": "./static/js/runtime-main.d5ecaa3b.js.map",
+    "static/js/2.f3b3fcb3.chunk.js": "./static/js/2.f3b3fcb3.chunk.js",
+    "static/js/2.f3b3fcb3.chunk.js.map": "./static/js/2.f3b3fcb3.chunk.js.map",
+    "static/js/3.cf437c3f.chunk.js": "./static/js/3.cf437c3f.chunk.js",
+    "static/js/3.cf437c3f.chunk.js.map": "./static/js/3.cf437c3f.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "./static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.f3b3fcb3.chunk.js.LICENSE.txt": "./static/js/2.f3b3fcb3.chunk.js.LICENSE.txt",
+    "static/media/banner.9383ef15.png": "./static/media/banner.9383ef15.png",
+    "static/media/blog.b44dc68a.jpg": "./static/media/blog.b44dc68a.jpg",
+    "static/media/graph-img.1e0af555.png": "./static/media/graph-img.1e0af555.png",
+    "static/media/login.8245b66f.jpg": "./static/media/login.8245b66f.jpg",
+    "static/media/logo.abb5066c.png": "./static/media/logo.abb5066c.png",
+    "static/media/take-img.1e57af8e.png": "./static/media/take-img.1e57af8e.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.5a0eb0d4.js",
-    "static/js/2.a240f954.chunk.js",
+    "static/js/runtime-main.d5ecaa3b.js",
+    "static/js/2.f3b3fcb3.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.b4ded6a5.chunk.js"
+    "static/js/main.ab2796df.chunk.js"
   ]
 }

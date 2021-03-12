@@ -9,6 +9,7 @@ import SettingSideBar from './Sidebar'
 import Email from './email/Email';
 import Styling from './styling/Styling';
 import Typography from './typography/Typography';
+import Footer from '../../components/footer/Footer';
 function Settings(props) {
     useEffect(()=>{
 
@@ -33,6 +34,7 @@ function Settings(props) {
          {/* */}
         
         </div>
+        <Footer/>
       </div>
     </div>
     </div>

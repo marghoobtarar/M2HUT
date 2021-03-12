@@ -33,7 +33,7 @@ function App(props) {
     axios(
       {
         method:'GET',
-        url: `https://m2hut-backend.wantechsolutions.com/api/admin/profile/get`,
+        url: `http://127.0.0.1:8000/user/authenticate/`,
         headers:{
           Authorization:  `Bearer ${localStorage.getItem('access_token')}`
         }

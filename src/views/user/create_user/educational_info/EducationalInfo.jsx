@@ -54,7 +54,7 @@ function EditUser(props) {
                           <div className="col-xs-12 col-sm-6">
                             <div className="input-feild">
                               <label>Institution email account</label>
-                              <input required type="email" className="form-control"onChange={e=>props.createUserData(e)}value={props.userData.institutioAccount}   name="institutioAccount"/>
+                              <input required type="email" className="form-control"onChange={e=>props.createUserData(e)}value={props.userData.institutionAccount}   name="institutionAccount"/>
                             </div>
                           </div>
                         </div>

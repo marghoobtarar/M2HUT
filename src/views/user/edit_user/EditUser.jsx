@@ -4,6 +4,7 @@ import styles from './styles'
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Sidebar from '../../../components/sidebar/Sidebar';
+import Footer from '../../../components/footer/Footer';
 function EditUser(props) {
     useEffect(()=>{
 console.log('editpost.js',props.data)
@@ -165,13 +166,9 @@ console.log('editpost.js',props.data)
               </div>
             </div>
           </div>
+          <Footer/>
         </div>
-        <div class="footer ">
-          <ul class="d-flex list-none justify-content-between">
-            <li><a href="#"><img src="img/M2hut-logo.png" alt="image" /></a></li>
-            <li><small>© M2Engineering, South Africa</small></li>
-          </ul>
-        </div>
+       
       </div>
     </div>
   );

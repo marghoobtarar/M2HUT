@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import addUser from '../../../assets/img/add-icon.png'
 import Pagination from './Pagination';
+import Footer from '../../../components/footer/Footer';
 
 function AllNotices(props) {
     useEffect(()=>{
@@ -93,10 +94,12 @@ function AllNotices(props) {
                 <Pagination dataPage = {e=>currentPage(e)} todos={props.notices}/>
             </div>
           </div>
+          <Footer/>
         </div>
       
       </div>
 		</div>
+
     </div>
   );
 }

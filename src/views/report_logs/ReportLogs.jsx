@@ -7,7 +7,8 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Sidebar from '../../components/sidebar/Sidebar';
 import Navbar from '../../components/navbar/Navbar';
-
+import Footer from '../../components/footer/Footer';
+import axios from 'axios'
 // let weeksDays = Array.from({length: moment().daysInMonth()}, (x, i) => moment().startOf('month').add(i, 'days').format('ll'))
 
 let currentMonth = moment().format('MMMM');
@@ -67,25 +68,54 @@ function ReportLogs() {
     })
   
     const downloadPdf= e =>{
-        console.log('download pdf',e)
-        // axios
-        // .get(
-        //   `http://127.0.0.1:8000/pdf/${props.match.params.individualId}/`,
-        //   {
-        //     responseType: "blob",
-        //     data: { d: props.match.params.individualId },
-        //   }
-        // )
-        // .then((response) => {
-        //   const content = response.headers["content-type"];
-        //   download(response.data, individualProduct.name, content);
+        // console.log('download pdf',e)
+      
+
+        axios(
+            {
+              method:'GET',
+              // url: `https://m2hut-backend.wantechsolutions.com/api/admin/workLogsPDF/${e}/0`,
+              url:`http://127.0.0.1:8000/pdf/${e}/`,
+
+              headers:{
+                Authorization:  `Bearer ${localStorage.getItem('access_token')}`
+              },
+              responseType: "blob",
+          }).then((response)=>{
+            // console.log(response.data)
+            const content = response.headers["content-type"];
+            download(response.data, 'my name', content);
           
-        // });
+            
+          }).catch((err)=>{
+            console.log(err)
+          
+      
+          }) 
+
     }
     const monthDataPdf = e=>{
-        console.log(e)
-        // var data = month.map(item =>item).indexOf(e)
-        // console.log(data)
+        // console.log(e)
+        axios(
+            {
+              method:'GET',
+              // url: `https://m2hut-backend.wantechsolutions.com/api/admin/workLogsPDF/${e}/1`,
+              url:`http://127.0.0.1:8000/pdf_month/${e}/`,
+              headers:{
+                Authorization:  `Bearer ${localStorage.getItem('access_token')}`
+              },
+              responseType: "blob",
+          }).then((response)=>{
+            // console.log(response.data)
+            const content = response.headers["content-type"];
+            download(response.data, 'my name', content);
+          
+            
+          }).catch((err)=>{
+            console.log(err)
+          
+      
+          })
     }
    
   return (
@@ -128,7 +158,8 @@ function ReportLogs() {
           
                     
                 })}
-                  </div>
+                <Footer/>
+            </div>
         
         </div>
 

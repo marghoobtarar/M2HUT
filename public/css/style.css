@@ -1450,6 +1450,98 @@ input:checked + .slider:before {
 
 
 
+/*--------- Dasbboard --------*/
+a.create-user-btn.pull-right {
+  color: #2B820D;
+  font-weight: 500;
+}
+a.create-user-btn.pull-right span img{
+  width: 25px;
+}
+.report-box {
+  box-shadow: 0 0 10px 10px #eee;
+  background: #fff;
+  border-radius: 5px;
+  padding: 15px 40px;
+  margin: 20px 0 0;
+}
+span.cricle-red {
+  width: 10px;
+  height: 10px;
+  background: red;
+  display: inline-block;
+  border-radius: 10px;
+  margin: 2px 2px 0 0;
+  position: relative;
+  top: 1px;
+}
+span.cricle-green {
+  width: 10px;
+  height: 10px;
+  background: #23ac00;
+  display: inline-block;
+  border-radius: 10px;
+  margin: 2px 2px 0 0;
+  position: relative;
+  top: 1px;
+}
+span.cricle-00b4fe {
+  width: 10px;
+  height: 10px;
+  background: #00b4fe;
+  display: inline-block;
+  border-radius: 10px;
+  margin: 2px 2px 0 0;
+  position: relative;
+  top: 1px;
+}
+.report-text {
+  text-align: center;
+  font-size: 12px;
+}
+.report-text strong {
+  text-align: center;
+  display: block;
+  font-size: 30px;
+  font-weight: 800;
+  color: #333;
+  line-height: 1.5;
+}
+.p-0{
+  padding:0;
+}
+.graph-item strong span {
+  font-size: 30px;
+  font-weight: 800;
+  color: #333;
+  display: block;
+  line-height: 1.5;
+}
+.circle-graph {
+  box-shadow: 0 0 10px 10px #eee;
+  background: #fff;
+  border-radius: 5px;
+  padding: 25px 25px;
+  margin: 130px 0 0 0;
+}
+.circle-graph img {
+  display: block;
+  max-width: 100%;
+  margin: auto;
+}
+.circle-graph ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px auto 0;
+  text-align: center;
+}
+.circle-graph ul li {
+  display: inline-block;
+  font-size: 10px;
+}
+
+
+
 
 /* ***********************akmal**************************** */
 .email-set p{
@@ -1804,3 +1896,10 @@ border-radius: 10px;
   display: block; 
   /* margin-left: -12px; */
 }
+
+
+
+
+
+
+

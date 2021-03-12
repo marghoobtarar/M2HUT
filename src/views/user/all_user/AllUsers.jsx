@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import addUser from '../../../assets/img/add-icon.png'
 import Pagination from './Pagination';
 import Sidebar from '../../../components/sidebar/Sidebar';
+import Footer from '../../../components/footer/Footer';
 
 function AllUsers(props) {
     useEffect(()=>{
@@ -59,8 +60,8 @@ function AllUsers(props) {
                   {
                     props.users.map(function (data,index) 
                      { return<tr key={index}>
-                              <th>{data.firstName}</th>
-                              <td>{data.identityNumber}</td>
+                              <th>{data.first_name}</th>
+                              <td>{data.passport}</td>
                               <td>{data.cell}</td>
                               <td>{data.city}</td>
                               <td>
@@ -80,6 +81,7 @@ function AllUsers(props) {
               </table>
             </div>    
           </div>
+          <Footer/>
         </div>
       
       </div>
