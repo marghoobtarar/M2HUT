@@ -22,7 +22,7 @@ from .models import (WorkLogsModel,
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
-        
+        attrs['email'] = attrs['email'].lower()
         data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
         # Custom data you want to include
         data['message']="user authenticated successfully"
@@ -37,7 +37,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user']['last_name']=self.user.last_name
         data['user']['companyName']=self.user.companyName
         data['user']['registerName']=self.user.registerName
-        print(self.user.image)
+        data['user']['is_staff']=self.user.is_staff
+
         if self.user.image is not None:
             data['user']['image']= "media/"+str(self.user.image)
         else:

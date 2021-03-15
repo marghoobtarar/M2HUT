@@ -35,5 +35,6 @@ urlpatterns = [
     path('manage_admin_email/<int:pk>/',views.ManageAdminEmail.as_view(),
         name = "it will update and delete the  admin email"),
     
-
+    path('dashboard_analytics/',views.DashboardAnalytics.as_view(),
+        name = 'it will get the analytics of the user')
 ]

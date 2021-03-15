@@ -22,8 +22,16 @@ from rest_framework_jwt.utils import jwt_decode_handler
 from django.core import serializers
 import json
 from user.views import getUser
+from adminside.models import (AdminEmailModel,
+                                RegisterEmailModel,
+                                SuspensionEmailModel)
+from adminside.serializer import (AdminEmailSerializer,
+                                    RegisterEmailSerializer,
+                                    SuspensionEmailSerializer)
+from django.core.exceptions import ValidationError
 
-
+from django.core.mail import EmailMessage
+from django.core.mail.backends.smtp import EmailBackend
 # Create your views here.
 
 
@@ -34,65 +42,67 @@ class CreateUser(APIView):
         return Response([UserCreateSerializer(user).data for user in User.objects.filter(is_superuser=False , admin_id =getUser(request))])
 
     def post(self, request):
-        payload = request.data
-        # print('creating the user',payload)
-        _mutable = payload._mutable
-        payload._mutable = True
-        t = Template('<h3>'
-           ' Dear User'
-        '</h3>'
-        '<p>Thank you fo applying to use the CETA artisan portal.</p>'
-       '<p>We are happy to inform to inform you that your account has been approved</p>'
-       '<p>Username: {{ email }} </p>'
-        '<p>Password: {{ password }} </p>'
-       ' <p>Regards,</p>'
-        '<p>CETA Artisan Platform Team</p>'
-        ' <img style="max-width:100px;max-height:100px src="https://herokudjangoapp11abc.herokuapp.com/media/images/logo.png">')
+        try:
+            payload = request.data
+            config = [AdminEmailSerializer(dat).data for dat in AdminEmailModel.objects.filter(admin_id=getUser(request)) ][0]          
+            email_temp = [RegisterEmailSerializer(dat).data for dat in RegisterEmailModel.objects.filter(admin_id=getUser(request)) ][0]
 
-    #    ' <img style="max-width:100px;max-height:100px;" src="https://herokudjangoapp11abc.herokuapp.com/media/user_image/pitstop.png">')
-        c = Context({'email':payload['email'], 'password':payload['password']})
-        html = t.render(c)
-        msg = EmailMessage('User Registration', html, 'asifbakhtiar18@gmail.com', [payload['email']])
-        msg.content_subtype = "html"  # Main content is now text/html
-        msg.send()
-
-        # print(request.data)
-        
-        payload['admin_id'] = getUser(request)
-        # to_email = payload['email']
-        payload._mutable = _mutable
-
-        html = t.render(c)
-        serializer = UserCreateSerializer(data=payload)
-        
-        if serializer.is_valid():
-            # template = get_template('account_registered.html')
-            # html  = template.render(payload)
-            mail_subject = 'User Credentials'
-            message = msg
-            # render_to_string('account_registered.html',
-                # 'account_registered.html', 
-                # {
-                #     'html':html
-                # 'user': payload,
-                # 'domain':  get_current_site(request).domain,
-                # 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                # 'token': account_activation_token.make_token(user),
-            # }
-            # )
-            # to_email = to_email
-            # email = EmailMessage(
-            #     mail_subject, message, to=[to_email]
-            # )
+            backend = EmailBackend (host=config['smtpHostName'], port=config['smtpPort'], username=config['smtpUser'], 
+                           password=config['smtpPassword'], use_tls=True, fail_silently=False)
+            
+            # (host='mail.wantechsolutions.com', port='587', username='marghoob@wantechsolutions.com', 
+            #                password='marghoob@123', use_tls=True, fail_silently=False)
+            # email = EmailMessage(subject='subj', body='body', from_email=config['smtpUser'], to=['marghoobtarar0344@gmail.com'], 
+            #      connection=backend)
             # email.send()
-            user = serializer.save()
-            user.set_password(user.password)
-            user.save()
+            # print('1st email has sent')
+            _mutable = payload._mutable
+            payload._mutable = True
+            t = Template(email_temp['description'])
+            
+            # Template('<h3>'
+            # ' Dear User' 
+            # '</h3>'
+            # '<p>Thank you fo applying to use the CETA artisan portal.</p>'
+            # '<p>We are happy to inform to inform you that your account has been approved</p>'
+            # '<p>Username: {{ email }} </p>'
+            #     '<p>Password: {{ password }} </p>'
+            # ' <p>Regards,</p>'
+            # '<p>CETA Artisan Platform Team</p>'
+            # ' <img style="max-width:100px;max-height:100px src="https://herokudjangoapp11abc.herokuapp.com/media/images/logo.png">')
+
+            c = Context({'email':payload['email'], 'password':payload['password']})
+            html = t.render(c)
+            msg = EmailMessage(subject = email_temp['heading'],
+                    body =html, 
+                    from_email = config['smtpUser'], 
+                    to = [payload['email']],
+                    connection=backend)
+            msg.content_subtype = "html"  # Main content is now text/html
+            msg.send()
+            print('email is ', payload['email'])
+            payload['email'] = payload['email'].lower()
+            print('email is ', payload['email'])
+
+            payload['admin_id'] = getUser(request)
+            payload._mutable = _mutable
+
+            html = t.render(c)
+            serializer = UserCreateSerializer(data = payload)
+            
+            if serializer.is_valid():
+               
+                user = serializer.save()
+                user.set_password(user.password)
+                user.save()
 
 
-            return Response({'message':"User Has been created"},status=status.HTTP_201_CREATED)
-        else:
-            return Response({'message':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message':"User Has been created"},status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as v:
+            return Response({'message':'there is an error'}, v)
+
 
 
         return Response({'message':'User is already exists'}, status=status.HTTP_409_CONFLICT)
@@ -123,31 +133,37 @@ class ManageUser(APIView):
         payload = request.data
         _mutable = payload._mutable
         payload._mutable = True
-        print('here is the payload', payload)
-        
-        # token = request.headers.get('Authorization').split(' ')[1]
-        # decoded_payload = jwt_decode_handler(token)
-
         try:
             user = payload['user_id']
-            payload['is_active'] = payload['accountStatus']
-            
-            payload._mutable = _mutable
-            print(user)
-            test = User.objects.get(id=user)
+            active =payload['accountStatus']
 
+            payload['is_active'] = payload['accountStatus']
+            if active == 'false' :
+                config = [AdminEmailSerializer(dat).data for dat in AdminEmailModel.objects.filter(admin_id=getUser(request)) ][0]          
+                email_temp = [SuspensionEmailSerializer(dat).data for dat in SuspensionEmailModel.objects.filter(admin_id=getUser(request)) ][0]
+                user_email = User.objects.values('email').get(id = user)
+                backend = EmailBackend (host=config['smtpHostName'], port=config['smtpPort'], username=config['smtpUser'], 
+                            password=config['smtpPassword'], use_tls=True, fail_silently=False)
+                t = Template(email_temp['description'])
+                
+                c = Context({'email':user_email['email']})
+                html = t.render(c)
+                msg = EmailMessage(subject = email_temp['heading'],
+                        body = html, 
+                        from_email = config['smtpUser'], 
+                        to = [user_email['email']],
+                        connection=backend)
+                msg.content_subtype = "html"  # Main content is now text/html
+                msg.send()
+            payload._mutable = _mutable
         except (KeyError, User.objects.get(id=user).DoesNotExist):
             return Response('User Not Found', status.HTTP_404_NOT_FOUND)
         else:
-
             serializer = UserUpdateSerializer(User.objects.get(id=user), data = payload)
-
             if serializer.is_valid():
                 serializer.save()
-                print('user has been updated',)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                print('user is not updating')
                 return Response({'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -432,13 +432,6 @@ class WorkLogsStatus(APIView):
 
 
 # ******************************* Break logs***********************#
-
-
-
-
-
-
-
 class Notices(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
@@ -464,8 +457,6 @@ class ManageNotices(generics.RetrieveUpdateAPIView):
 
     serializer_class = NoticesSerializer
 
-
-
 class WorkLogsBreakType(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
@@ -482,8 +473,6 @@ class WorkLogsBreakType(generics.ListCreateAPIView):
             return Response ({'message':'This is an error is fetching break',
                                 'error':v},
                                status=status.HTTP_400_BAD_REQUEST )
-
-
 
 # ****************** get the user from the token**************
 def getUser(request):

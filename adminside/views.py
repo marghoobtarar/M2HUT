@@ -1,16 +1,21 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import  IsAdminUser
 from rest_framework import status, generics
-from django.db.models import Sum, Count, Avg
+from django.db.models import (Sum, 
+                            Count, 
+                            Avg, 
+                            Q)
+from django.db.models.functions import (TruncDay,
+                                        TruncDate)
+
 from django.http import HttpResponse
 from django.conf import settings
 from operator import itemgetter
 import os
 from django.utils.timezone import datetime #important if using timezones
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django.utils import timezone
 import pandas as pd
 # jwt decoder
@@ -71,9 +76,8 @@ class FrontendAppView(APIView):
                 status=501,
             )
 
-
 class Notices(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -116,7 +120,7 @@ class Notices(APIView):
                                     status=status.HTTP_400_BAD_REQUEST)
 
 class ManageNotices(APIView):
-    # permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAdminUser,)
 
     def get(self, request):
         try:
@@ -139,33 +143,21 @@ class ManageNotices(APIView):
         # print('this is updating', payload)
         payload['updated_at'] = today
         payload._mutable = _mutable
-
-
-
         try:
             home = NoticesModel.objects.get(id=pk)
         except (KeyError, NoticesModel.DoesNotExist):
-
             serializer = NoticesSerializer(home, data=payload)
-
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         else:
-
             serializer = NoticesSerializer(home, data=payload)
-
             if serializer.is_valid():
                 serializer.save()
-
-
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # def delete(self, request, pk):
@@ -180,17 +172,8 @@ class ManageNotices(APIView):
     #         return Response('Data deleted', status=status.HTTP_200_OK)
     #     # return Response('Data deleted', status=status.HTTP_200_OK)
 
-
-# class ManageNotices(generics.RetrieveUpdateAPIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     queryset = NoticesModel.objects.all()
-
-#     serializer_class = NoticesSerializer
-
-
 class WorkLogsBreakType(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -227,16 +210,15 @@ class WorkLogsBreakType(generics.ListCreateAPIView):
                                 'error':v},
                                     status=status.HTTP_400_BAD_REQUEST)
 
-
 class ManageWorkLogsBreakType(generics.UpdateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     queryset = WorkLogsBreakModel.objects.all()
 
     serializer_class = WorkLogsBreakSerilizer
 
 class Styling(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -276,16 +258,14 @@ class Styling(generics.ListCreateAPIView):
                                     status=status.HTTP_400_BAD_REQUEST)
 
 class ManageStyling(generics.UpdateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     queryset = StyleModel.objects.all()
 
     serializer_class = StyleSerializer
 
-
-
 class Typography(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -320,7 +300,7 @@ class Typography(generics.ListCreateAPIView):
                                     status=status.HTTP_400_BAD_REQUEST)
 
 class ManageTypography(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     def put(self, request, pk):
         payload = request.data
@@ -343,11 +323,8 @@ class ManageTypography(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
 class RegisterEmail(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -379,16 +356,16 @@ class RegisterEmail(generics.ListCreateAPIView):
             return Response({'message':'error occur', 
                                 'error':v},
                                     status=status.HTTP_400_BAD_REQUEST)
+
 class ManageRegisterEmail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     queryset = RegisterEmailModel.objects.all()
 
     serializer_class = RegisterEmailSerializer
 
-
 class SuspendEmail(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -422,13 +399,11 @@ class SuspendEmail(generics.ListCreateAPIView):
                                     status=status.HTTP_400_BAD_REQUEST)
 
 class ManageSuspendEmail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     queryset = SuspensionEmailModel.objects.all()
 
     serializer_class = SuspensionEmailSerializer
-
-
 
 class CkeditorImage(generics.ListCreateAPIView):
 
@@ -448,10 +423,8 @@ class CkeditorImage(generics.ListCreateAPIView):
                                 'error':v},
                                     status=status.HTTP_400_BAD_REQUEST)
 
-
-
 class AdminEmail(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     def get(self, request):
         try:
 
@@ -485,13 +458,53 @@ class AdminEmail(generics.ListCreateAPIView):
                                     status=status.HTTP_400_BAD_REQUEST)
 
 class ManageAdminEmail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
 
     queryset = AdminEmailModel.objects.all()
 
     serializer_class = AdminEmailSerializer
 
+class DashboardAnalytics(APIView):
+    permission_classes = (IsAdminUser,)
+    
+    def get(self, request):
+        print('this is inside the user', )
+        try:
+            today = datetime.today()
 
+            data = {}
+            user = getUser(request)
+            # total = Count('total_user', filter=Q(book__rating__gt=5))
+            # active = Count('book', filter=Q(book__rating__gt=5))
+            # not_active = Count('book', filter=Q(book__rating__gt=5))
+            # all_user = User.objects.filter(admin_id = getUser(request) ).\
+            #         aggregate(Count('id'))
+            # active_user = User.objects.filter(admin_id = getUser(request), is_active = True ).\
+            #         aggregate(Count('is_active'))
+            data['all_user'] = User.objects.filter(admin_id = user ).\
+                    aggregate(Count('id'))['id__count']
+            data['active_user'] = User.objects.filter(admin_id = user, is_active = True ).\
+                    aggregate(Count('is_active'))['is_active__count']
+            data['inactive_user'] = abs(data['all_user'] - data['active_user'])
+            data['register_records'] = WorkLogsModel.objects.filter(user_id__admin_id = user).\
+                                        aggregate(Count('id'))['id__count']
+            data['monthly_data'] = WorkLogsModel.objects.filter(user_id__admin_id = user, 
+                                        created_at__month = today.month ).\
+                                        aggregate(Count('id'))['id__count']
+            data['graph_data'] = WorkLogsModel.objects.filter(user_id__admin_id = user, 
+                                        created_at__month = today.month ).\
+                                        annotate(date = TruncDate('created_at'))\
+                                        .order_by('date')\
+                                        .values("date")\
+                                        .annotate(**{'total':Count('created_at')})\
+                                      
+        except ValidationError as v:
+            return Response({'message':'there is an error',
+                            
+                            'error' : v},
+                            status= status.HTTP_400_BAD_REQUEST)
 
-
+        else:
+            return Response({'message':'analytics data',
+                            'analytics': data })
 
