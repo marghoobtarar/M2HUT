@@ -32,7 +32,12 @@ console.log(props.userData)
                 <h3>Account Status</h3>
                 <span className="active-badge">{props.userData.accountStatus?'Active':'Deactivate'}</span>
                 <div className="profile_holder">
-                  <img src={`http://127.0.0.1:8000${props.userData.image}`} className="mr-auto ml-auto" alt="image" />
+                  {props.imageNew!==null?
+                                    <img src={`${props.userData.image}`} className="mr-auto ml-auto" alt="image" />
+                                    :
+                                    <img src={`http://127.0.0.1:8000${props.userData.image}`} className="mr-auto ml-auto" alt="image" />
+
+                                  }
                 </div>
                 <div className="profile_name mb-4">
                   <div className="upload-btn-wrapper">

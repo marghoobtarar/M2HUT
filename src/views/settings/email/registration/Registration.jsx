@@ -76,7 +76,8 @@ function Registration(props) {
 
             
         }).catch(err=>{
-            console.log(err)
+            console.log(err.res)
+            alert(err.res)
         })
      }
      else{
@@ -95,7 +96,7 @@ function Registration(props) {
 
             
         }).catch(err=>{
-            console.log(err)
+            alert('Please input the data into all fields.')
         })
      }
 

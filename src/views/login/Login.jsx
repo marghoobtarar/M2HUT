@@ -97,9 +97,17 @@ function Login(props) {
     axios
     .post(`http://127.0.0.1:8000/user/authenticate/`, payload)
     .then(res=>{
+      console.log(res.data)
+      if(res.data.user.is_staff){
+
       localStorage.setItem('access_token',res.data.access_token)
       setLoggedIn(true)
       setIsLoggedIn(true)
+
+      }
+      else{
+        alert('Sorry you have no access to this dashboard.')
+      }
     })
 			// .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
 			// .then( (myJson)=> {

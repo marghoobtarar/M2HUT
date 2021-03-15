@@ -51,7 +51,7 @@ console.log('editpost.js',props.data)
                   </div>
                   <div className="col-xs-12 col-sm-6">
                     <div className="input-field">
-                      <input onChange={e=>dataChange(e)} value={props.data.date} type="text" className="form-controls" placeholder="Date Published" name="" />
+                      <input onChange={e=>dataChange(e)} value={props.data.date} type="date" className="form-controls" placeholder="Date Published" name="" />
                     </div>
                   </div>
                 </div>

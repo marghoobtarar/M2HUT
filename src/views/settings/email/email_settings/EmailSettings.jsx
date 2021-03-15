@@ -71,10 +71,10 @@ function EmailSettings(props) {
             
             console.log(res.data)
             // setEmailSetting(res.data.admin_email[0])
-          
+          alert(res.data)
           })
           .catch(err=>{
-            console.log(err)
+            alert(err)
           })
        }
        

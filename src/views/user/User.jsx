@@ -224,22 +224,22 @@ headers:{
 
     formData.append('password', userData.password);
 
-// 
-formData.append('trainingInstitute', userData.trainingInstitute);   //append the values with key, value pair
-formData.append('institutePhone', userData.institutePhone);
-formData.append('facilitatorName', userData.facilitatorName);
-formData.append('institutionAccount', userData.institutionAccount);
-formData.append('instituteAddress', userData.instituteAddress);
-formData.append('instituteCity', userData.instituteCity);
-formData.append('institutezip_code', userData.institutezip_code);
+    // 
+    formData.append('trainingInstitute', userData.trainingInstitute);   //append the values with key, value pair
+    formData.append('institutePhone', userData.institutePhone);
+    formData.append('facilitatorName', userData.facilitatorName);
+    formData.append('institutionAccount', userData.institutionAccount);
+    formData.append('instituteAddress', userData.instituteAddress);
+    formData.append('instituteCity', userData.instituteCity);
+    formData.append('institutezip_code', userData.institutezip_code);
 
-formData.append('instituteCountry', userData.instituteCountry);
-formData.append('registerName', userData.registerName);
-formData.append('companyName', userData.companyName);
+    formData.append('instituteCountry', userData.instituteCountry);
+    formData.append('registerName', userData.registerName);
+    formData.append('companyName', userData.companyName);
 
 
 
-formData.append('password', userData.password);
+    formData.append('password', userData.password);
 
 
     formData.append('accountStatus', userData.accountStatus);
@@ -304,6 +304,7 @@ formData.append('password', userData.password);
                          submitUser = {e=>submitUser(e)}/> 
               :viewUser?
               <ViewUser 
+                imageNew ={org_image}
                 userData = {userData}
                 updateUser = {e=>updateUser(e)}
                 createUserData = {e=>createUserData(e)} />:null}
