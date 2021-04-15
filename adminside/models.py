@@ -39,7 +39,7 @@ class WorkLogsModel(models.Model):
                                         blank=True)
     end_at = models.DateTimeField(null=True ,blank=True)
     
-    total_works_hours = models.CharField(null=True,
+    total_works_hours = models.TimeField(null=True,
                                         max_length=300,
                                         blank=True)
     total_break_time = models.CharField(
@@ -54,7 +54,7 @@ class WorkLogsDetailsModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='WorkLogsModel.id+',
-                                help_text='model for the work logs'
+                                help_text='model for the work logs details'
                                 )
 
     captured_image = models.FileField(upload_to = 'work_log_images',  null=True)
@@ -99,7 +99,7 @@ class NoticesModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='User.id+',
-                                help_text= 'admin id will be displayed'
+                                help_text= 'admin notices'
                                 )
     # date = models.DateTimeField(default=timezone.now,
     #                                     blank=True)
@@ -135,7 +135,7 @@ class StyleModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='User.id+',
-                                help_text='model for the work logs'
+                                help_text='model for styling model'
                                 )
     systemName = models.CharField(max_length=300,
                                     blank=True)
@@ -167,7 +167,7 @@ class TypographyModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='User.id+',
-                                help_text='model for the work logs'
+                                help_text='model for typography'
                                 )
     h1 = jsonfield.JSONField(blank=True)
 
@@ -188,7 +188,7 @@ class RegisterEmailModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='User.id+',
-                                help_text='model for the work logs'
+                                help_text='model for register email'
                                 )
     heading = models.CharField(max_length=300,
                                 null=True    )
@@ -204,7 +204,7 @@ class SuspensionEmailModel(models.Model):
                                 null=True,
                                 on_delete=models.CASCADE, 
                                 related_name='User.id+',
-                                help_text='model for the work logs'
+                                help_text='model for suspension email'
                                 )
     heading = models.CharField(max_length=300,
                                 null=True    )
@@ -238,5 +238,6 @@ class AdminEmailModel(models.Model):
                                 null=True    )
     created_at = models.DateTimeField(default=timezone.now,
                                         blank=True)
-    updated_at = models.DateTimeField(null=True,blank=True)
+    updated_at = models.DateTimeField(null=True,
+                                        blank=True)
 

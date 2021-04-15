@@ -24,11 +24,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd*#iwh1+zrb*n!9m8tl^ny-#ibl^wkizi))%dbxp+8++na8%m^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-
+DEBUG = False
 # Application definition
-
 INSTALLED_APPS = [
     # Django Apps
     'django.contrib.admin',
@@ -39,23 +36,41 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_email_verification',
     # Third-Party Apps
+    'django_apscheduler',
+
     'easy_pdf',
     'rest_framework',
     'crispy_forms',
     'django_rest_passwordreset',
     'corsheaders',
-    'django_truncate',
-
-    # Local Apps (Your project's apps)
-
-    'adminside',
+    # cron class
+    'django_crontab',
+    'django_cron',
+    # my apps
+    'adminside.apps.AdminsideConfig',
     'user',
-    'UserAuth',
-    
-
+    'UserAuth.apps.UserauthConfig',
+]
+# crontab configurations
+CRONTAB_COMMAND_SUFFIX = '2>&1'
+CRONJOBS = [
+    ('*/1 * * * *', 'myapi.cron.my_scheduled_job','>> /home/marghoob/file.log'),
+    ('*/1 * * * *', 'myapi.cron.automatic_clockout','>> /home/marghoob/clockout.log')
 
 ]
-# CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# crontab cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
+
+CRON_CLASSES = [
+    "adminside.cron.MyCronJob",
+]
+# auth model
 
 AUTH_USER_MODEL = 'UserAuth.User'
 
@@ -78,17 +93,10 @@ ROOT_URLCONF = 'myapi.urls'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS=True
-ALLOWED_HOSTS=['http://localhost:3000',
-        'localhost:3000','127.0.0.1', 
-        'ca4df8763c8c.ngrok.io',
-        'herokudjangoapp11abc.herokuapp.com']
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_WHITELIST = ['*']
                          
-CORS_ALLOWED_ORIGINS = [
-"https://example.com", #ADD YOUR REACT IP IN THIS LIST
-"https://sub.example.com",
-"localhost:3000","ca4df8763c8c.ngrok.io",
-"http://127.0.0.1:8000"]
+CORS_ALLOWED_ORIGINS = ['https://m2hut.anms.pk']
 JWT_AUTH = {
     # Authorization:Token xxx
     'JWT_AUTH_HEADER_PREFIX': 'Token', }
@@ -121,24 +129,17 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
-
-
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
-
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
-
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
 # WSGI_APPLICATION = 'myapi.wsgi.application'
 ASGI_APPLICATION = "myapi.routing.application"
-
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -186,25 +187,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# EMAIL_ACTIVE_FIELD = 'is_active'
-# EMAIL_SERVER = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_ADDRESS = 'marghoobahmad0344@gmail.com'
-# # EMAIL_FROM_ADDRESS = 'noreply@pitstop.com'
-# EMAIL_PASSWORD = '786HaqHu' # os.environ['password_key'] suggested
-# EMAIL_MAIL_SUBJECT = 'Confirm your email'
-# # EMAIL_MAIL_HTML = 'mail_body.html'
-# # EMAIL_MAIL_PLAIN = 'mail_body.txt'
-# # EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
-# EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000/'
-
-
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'UserAuth.serializer.PasswordResetSerializer',
 }
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -214,14 +199,8 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'asifbakhtiar18@gmail.com'
 EMAIL_HOST_PASSWORD = 'fhmviqlxmsvxfimk'
-# milestone@321
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ACCOUNT_EMAIL_REQUIRED = True
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -231,43 +210,26 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-# STATIC_URL = '/static/'
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 LOGIN_REDIRECT_URL = 'http://localhost:3000/'
-# STATIC_URL = '/static/'
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# # for build folder enable or disable it
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 PROJECT_ROOT   =   os.path.join(os.path.abspath(__file__))
 REACT_APP_DIR = os.path.join(BASE_DIR)
-# STATICFILES_DIRS = [
-#     os.path.join(REACT_APP_DIR, 'build', 'static'),
-# ]
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static'),
+#)
+STATIC_ROOT = os.path.join(BASE_DIR, '/static')
 
-# Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)

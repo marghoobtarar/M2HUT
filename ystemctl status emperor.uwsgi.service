@@ -1,0 +1,11 @@
+[0;1;31m●[0m emperor.uwsgi.service - uwsgi emperor for micro domains website
+     Loaded: loaded (/etc/systemd/system/emperor.uwsgi.service; enabled; vendor preset: enabled)
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Wed 2021-04-07 10:59:09 UTC; 4s ago
+    Process: 417136 ExecStart=/home/ali/ngnix/env/md/bin/uwsgi --emperor /home/ali/ngnix/env/md/vassals --uid www-data --gid www-data [0;1;31m(code=exited, status=217/USER)[0m
+   Main PID: 417136 (code=exited, status=217/USER)
+
+Apr 07 10:59:09 m2hut.anms.pk systemd[1]: emperor.uwsgi.service: Scheduled restart job, restart counter is at 5.
+Apr 07 10:59:09 m2hut.anms.pk systemd[1]: Stopped uwsgi emperor for micro domains website.
+Apr 07 10:59:09 m2hut.anms.pk systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185memperor.uwsgi.service: Start request repeated too quickly.[0m
+Apr 07 10:59:09 m2hut.anms.pk systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185memperor.uwsgi.service: Failed with result 'exit-code'.[0m
+Apr 07 10:59:09 m2hut.anms.pk systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start uwsgi emperor for micro domains website.[0m

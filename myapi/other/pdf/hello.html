@@ -166,23 +166,23 @@
 					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">No.</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">FIRST NAME</p>
+					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">F.Name</p>
 				</td>
 				<td>
 					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">SURNAME</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">IDENTITY NUMBER</p>
+					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">ID#</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">CONTACT NO.</p>
+					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">Cell#</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">Signature Date</p>
+					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">Signature</p>
 				</td>
 			
 				<td>
-					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">TOTAL DAYS ABSENT</p>
+					<p style="font-size: 14px;font-weight: bold;margin:0;padding:0;">ABSENT</p>
 				</td>
 			</tr>
 			{% for r in data %}
@@ -192,22 +192,22 @@
 					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;"> {{ r.tid }}</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.first_name}} </p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.first_name }}{{r.user_id__first_name}} </p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.last_name}}</p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.last_name}}{{r.user_id__last_name}}</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.passport}}</p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.passport}} {{r.user_id__passport}}</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.cell}}</p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.cell}} {{r.user_id__cell}}</p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.created_at}}</p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.created_at}} </p>
 				</td>
 				<td>
-					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">0</p>
+					<p style="font-size: 14px;font-weight: 300;margin:0;padding:0;">{{r.absent}}  {{r.user_id__absent}}</p>
 				</td>
 			</tr>
 			{% endfor %}

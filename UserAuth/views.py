@@ -44,9 +44,18 @@ class CreateUser(APIView):
     def post(self, request):
         try:
             payload = request.data
-            config = [AdminEmailSerializer(dat).data for dat in AdminEmailModel.objects.filter(admin_id=getUser(request)) ][0]          
-            email_temp = [RegisterEmailSerializer(dat).data for dat in RegisterEmailModel.objects.filter(admin_id=getUser(request)) ][0]
-
+            config = [AdminEmailSerializer(dat).data for dat in AdminEmailModel.objects.filter(admin_id=getUser(request)) ]          
+            email_temp = [RegisterEmailSerializer(dat).data for dat in RegisterEmailModel.objects.filter(admin_id=getUser(request)) ]
+            if(len(config) <= 0):
+                
+                return Response({'message':'Please check your email configrations'},
+                                status=status.HTTP_404_NOT_FOUND)
+                
+            if(len(email_temp) <= 0):
+                return Response({'message':'Please check your register email configrations'},
+                                status=status.HTTP_404_NOT_FOUND)
+            config = config[0]
+            email_temp = email_temp[0]
             backend = EmailBackend (host=config['smtpHostName'], port=config['smtpPort'], username=config['smtpUser'], 
                            password=config['smtpPassword'], use_tls=True, fail_silently=False)
             
@@ -79,27 +88,29 @@ class CreateUser(APIView):
                     to = [payload['email']],
                     connection=backend)
             msg.content_subtype = "html"  # Main content is now text/html
-            msg.send()
-            print('email is ', payload['email'])
+            # msg.send()
+            # print('email is ', payload['email'])
             payload['email'] = payload['email'].lower()
-            print('email is ', payload['email'])
-
+            # print('email is ', payload['email'])
+            
             payload['admin_id'] = getUser(request)
             payload._mutable = _mutable
 
             html = t.render(c)
             serializer = UserCreateSerializer(data = payload)
-            
-            if serializer.is_valid():
-               
-                user = serializer.save()
-                user.set_password(user.password)
-                user.save()
-
-
-                return Response({'message':"User Has been created"},status=status.HTTP_201_CREATED)
+            if(not User.objects.filter(email = payload['email']).exists()):
+                print('here user is already exists')
+                if serializer.is_valid():
+                    msg.send()
+                    user = serializer.save()
+                    user.set_password(user.password)
+                    user.save()
+                    return Response({'message':"User Has been created"},status=status.HTTP_201_CREATED)
+                else:
+                    return Response({'message':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'message':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message':'User with this email is already exists'}, status=status.HTTP_409_CONFLICT)
+
         except ValidationError as v:
             return Response({'message':'there is an error'}, v)
 
@@ -167,6 +178,24 @@ class ManageUser(APIView):
                 return Response({'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def patch(self, request):
+        
+        payload = request.data
+        _mutable = payload._mutable
+        payload._mutable = True
+        try:
+            payload['is_active'] = True
+            serializer = UserUpdateSerializer(User.objects.get(id=getUser(request)), data = payload)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except:
+            return Response({'message':'Try again your request could not proceed'},
+                         status=status.HTTP_400_BAD_REQUEST)
+
 
     def delete(self, request, pk):
 

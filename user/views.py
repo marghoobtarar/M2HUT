@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, generics
-from django.db.models import Sum, Count, Avg
+from django.db.models import Sum, Count, Avg, Q
 from django.http import HttpResponse
 from django.conf import settings
 from operator import itemgetter
@@ -54,6 +54,76 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     # Replace the serializer with your custom
     serializer_class = CustomTokenObtainPairSerializer
 
+class DashboardAnalytics(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request):
+        print('this is inside the user', )
+        try:
+            today = datetime.today()
+            data = {}
+            user = getUser(request)
+            admin = User.objects.values('admin_id').get(id = user)
+            notice =NoticesSerializer( NoticesModel.objects.filter(admin_id = admin['admin_id'],
+                                                                publish=True).last()).data
+            absents = WorkLogsModel.objects.filter(
+                                        created_at__month = today.month,    
+                                        created_at__year = today.year,
+                                        total_works_hours = None  , 
+                                         user_id = user,         
+                                        ).\
+                                        aggregate(Count('id'))['id__count']
+            presents = WorkLogsModel.objects.filter( ~Q(total_works_hours = None ) ,
+                                        created_at__month = today.month,
+                                        created_at__year = today.year,
+                                        user_id = user,         
+                                       ).\
+                                        aggregate(Count('id'))['id__count']
+
+            total_workdays = WorkLogsModel.objects.\
+                                    values('total_works_hours', 'created_at__date').\
+                                        filter( ~Q(total_works_hours = None) , 
+                                            created_at__month = today.month,
+                                            created_at__year = today.year,
+                                            user_id = user,         
+                                       )    
+            graph_workdays = WorkLogsModel.objects.\
+                                    values('total_works_hours', 'created_at__date').\
+                                        filter( ~Q(total_works_hours = None) , 
+                                            # created_at__month = today.month,
+                                            # created_at__year = today.year,
+                                            user_id = user,         
+                                       )    
+            previous_seconds = 0
+            loop = 0
+            for dat in graph_workdays:
+                graph_workdays[loop]['total_works_hours__hour'] = dat['total_works_hours'].hour + \
+                                                            dat['total_works_hours'].minute/60
+                graph_workdays[loop].pop('total_works_hours')
+                loop+=1
+            for dat in total_workdays:
+                try:
+                    date = datetime.strptime(str( dat['total_works_hours']),'%H:%M:%S.%f')
+                except: 
+                    date = datetime.strptime(str( dat['total_works_hours']),'%H:%M:%S')
+
+                previous_seconds = (date.second + date.minute*60 + date.hour*3600) + previous_seconds
+            data['total_work_hours'] = convert_to_hours(previous_seconds)
+            data['absents'] = absents
+            data['presents'] = presents 
+            data['notices'] = notice
+            data['working_hours'] = graph_workdays
+                      
+        except ValidationError as v:
+            return Response({'message':'there is an error',
+                            
+                            'error' : v},
+                            status= status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({'message':'analytics data',
+                            'analytics': data })
+
 # ******************************* Work logs***********************#
 class WorkLogs(APIView):
     permission_classes = (IsAuthenticated,)
@@ -65,13 +135,34 @@ class WorkLogs(APIView):
              'total_break_time',
              'total_works_hours','user_id').filter(user_id = getUser(request))
 
-            print(data)
+            # print(data)
             i = 0
 
             for dat in data:
                 address = WorkLogsDetailsModel.objects.values('address').filter(worklog_id = dat['id']).order_by('-created_at').first()
-                print('address is',address)
-                data[i]['address']  = address['address']
+                if address is not None:
+
+                    data[i]['address']  = address['address']
+                else:
+                    data[i]['address'] = None
+                # c = datetime.strptime (str(data[i]['created_at']), "%Y-%m-%d %H:%M:%S%f%z")
+                # print(c.month)
+                created_at = data[i]['created_at'].month
+                end_at = data[i]['end_at']
+                print(created_at)
+                print(data[i]['created_at'])
+                if end_at is not None and created_at is not None:
+                    if(data[i]['created_at'].day == data[i]['end_at'].day and 
+                        data[i]['created_at'].hour == data[i]['end_at'].hour and
+                        data[i]['created_at'].minute == data[i]['end_at'].minute):
+                        data[i]['created_at'] = None
+                        data[i]['end_at'] = None
+                      
+
+                # else:
+                #     dat['absent'] = 0 
+            # else:
+            #     dat['absent'] = 0
                 i += 1
         
             return Response({'messag':'Work Log list retrieved successfully.',
@@ -97,9 +188,6 @@ class WorkLogs(APIView):
         # or even base64 files, with custome name
         # file = FileModel.objects.create(base64_file(data=img_base64_str, name="custome_name"))
         today = datetime.today()
-        data={}
-        
-
         try:
             _mutable = payload._mutable
             payload._mutable = True
@@ -150,12 +238,6 @@ class WorkLogs(APIView):
                             )
             else:
                 if(int( payload['worklog_type'])== 2):
-                    # print('break id', isExist[0]['work_log_break_id'])
-
-                    # payload['end_time'] = datetime.today()
-                    # detail_worklog = WorkLogsDetailsModel.objects.get(
-                    #                                 worklog_id = isExist[0]['id'])
-                    # current_data_worklog_details = WorkLogDetailsSerilizer(detail_worklog).data
                     if(WorkLogsDetailsModel.objects.filter(created_at__year=today.year,
                                        created_at__month=today.month,
                                        created_at__day=today.day,
@@ -171,15 +253,12 @@ class WorkLogs(APIView):
                         created_at = isExist[0]['created_at']
                         payload['worklog_id'] = isExist[0]['id']
                         payload['work_log_break_id'] = None
-
                         payload['total_works_hours']= str(datetime.today() - getHours(created_at))
                         payload._mutable = _mutable
                         update_worklog = WorkLogSerilizer( WorkLogsModel.objects.get(id = isExist[0]['id']),data = payload)
-
                         if(update_worklog.is_valid()):
                             update_worklog.save()
                             serializer = WorkLogDetailsSerilizer( data = payload )
-
                             if serializer.is_valid():
                                 serializer.save()
                                 return Response(
@@ -192,9 +271,7 @@ class WorkLogs(APIView):
                                 {'message':"Data is not serilized form"},
                                 status = status.HTTP_400_BAD_REQUEST
                                 )
-                    
                 elif(int( payload['worklog_type'])== 3 ):
-                    
                     if(WorkLogsDetailsModel.objects.filter(created_at__year=today.year,
                                        created_at__month=today.month,
                                        created_at__day=today.day,
@@ -232,7 +309,6 @@ class WorkLogs(APIView):
                                        worklog_id =isExist[0]['id'],
                                        
                                        ).order_by('-created_at').first() ).data
-                    print('this is pre object',if_pre_obj)
                     if(not if_pre_obj):
                         return Response(
                                     {
@@ -257,10 +333,13 @@ class WorkLogs(APIView):
                                     status = status.HTTP_400_BAD_REQUEST )
 
                     elif(if_pre_obj['worklog_type'] == 3):
+                        print(isExist[0]['id'])
+
                         recent_break_in = WorkLogDetailsSerilizer( WorkLogsDetailsModel.objects.filter(
                                                         worklog_id = isExist[0]['id'],
                                                         work_log_break_id__isnull = False
                                                         ).order_by('-created_at').first()).data
+                       
                         previous_break_time = isExist[0]['total_break_time']
                         print('***************', recent_break_in, previous_break_time)
                         total_break_time = datetime.today() - getHours(str(recent_break_in['created_at']))
@@ -278,26 +357,16 @@ class WorkLogs(APIView):
                             previous_break_time = math.ceil( previous_break_time.second + 
                                                     previous_break_time.minute*60 +
                                                     previous_break_time.hour*3600)
-                            total_break_time = total_break_time + previous_break_time
-
-
-                            
+                            total_break_time = total_break_time + previous_break_time                 
                         payload['total_break_time'] = str(datetime.time( 
                                                            datetime.strptime(str(dt.timedelta(seconds = total_break_time)) ,'%H:%M:%S') ))
-                        # payload['end_at'] = datetime.today()
-                        
-                        # print(recent_break_in)
-                        # break_time = recent_break_in['created_at']
-                        # print('**************** break time', break_time)
                         payload['worklog_id'] = isExist[0]['id']
-
                         payload._mutable = _mutable
                         update_worklog = WorkLogSerilizer( WorkLogsModel.objects.get(id = isExist[0]['id']),data = payload)
                         # print(update_worklog)
                         if(update_worklog.is_valid()):
                             update_worklog.save()
                             serializer = WorkLogDetailsSerilizer( data = payload )
-
                             if serializer.is_valid():
                                 serializer.save()
                                 return Response(
@@ -305,21 +374,16 @@ class WorkLogs(APIView):
                                     'work_log':update_worklog.data,
                                     'work_log_details': serializer.data},
                                     status = status.HTTP_201_CREATED )
-            
                         else:
                             return Response(
                                 {'message':"Data is not serilized form"},
                                 status = status.HTTP_400_BAD_REQUEST
                                 )
-                    
                 else:
                     return Response({'message':'Today data is already exist'},
                                     status=status.HTTP_409_CONFLICT)
-
         except ValidationError as v:
             print("validation error", v)
-
-
 class ManageWorkLogs(APIView):
     # permission_classes = (IsAuthenticated,)
 
@@ -383,30 +447,66 @@ class WorkLogsStatus(APIView):
             worklogs = [WorkLogSerilizer(dat).data for dat in WorkLogsModel.objects.filter(
                                        created_at__year=today.year,
                                        created_at__month=today.month,
-                                       created_at__day=today.day, user_id = user_id)]
+                                       created_at__day = today.day,
+                                       total_works_hours=None,
+                                       user_id = user_id).order_by('-created_at')[:1]]
             print(worklogs)
-            
-            if worklogs:
-                
-                worklog_type = WorkLogDetailsSerilizer( WorkLogsDetailsModel.objects.filter(
-                                                    worklog_id = worklogs[0]['id'] ).
-                                                    order_by('-created_at').first()).data
-                
-                if(worklog_type['worklog_type']==1):
-                    status_log = 3
-                elif(worklog_type['worklog_type']==3):
-                   status_log= 4
-                elif(worklog_type['worklog_type']==4):
-                    status_log= 2
+            if worklogs :  
+                time = today - getHours(worklogs[0]['created_at'])
+                print(time)
+                days, hours, minutes = time.days, time.seconds // 3600, time.seconds // 60 % 60
+                print(hours)
+                if time.days < 1 and hours < 12 :
+                    print('this is inside the status')
+                    worklog_type =  WorkLogsDetailsModel.objects.values('worklog_type').filter(
+                                                        worklog_id = worklogs[0]['id'] ).\
+                                                        order_by('-created_at')
+                    # [WorkLogDetailsSerilizer(dat).data for dat in  WorkLogsDetailsModel.objects.filter(worklog_id = worklogs[0]['id'] ) ]
+                   
+                    print(worklog_type)
+                    if worklog_type:
+                        worklog_type = worklog_type[:1][0]
+                    # worklog_type = WorkLogsDetailsModel.objects.values('worklog_type').filter(
+                    #                                     worklog_id = worklogs[0]['id'] ).\
+                    #                                     order_by('-created_at')[:1][0]
+                        print(worklog_type)
+
+                        if(int(worklog_type['worklog_type']) ==1):
+                            status_log = 3
+                        elif(int(worklog_type['worklog_type']) ==3):
+                            status_log= 4
+                        elif(int(worklog_type['worklog_type']) ==4):
+                            status_log= 2
+                        else:
+                            status_log= 1
+                        return Response({'messag':'Work Log status retrieved successfully.',
+                                        'status':status_log,
+                                        'clock_in' : worklogs[0]['created_at'],
+                                        'clock_out' : worklogs[0]['end_at']
+                                        },
+                                            status=status.HTTP_200_OK)
+                    else:
+                        status_log={
+                            'status':1,
+                            'clock_in' : None,
+                            'clock_out' : None
+                        }
+                        return Response({'messag':'Work Log status retrieved successfully.',
+                                        'status':1,
+                                        'clock_in' : None,
+                                        'clock_out' : None},
+                                            status=status.HTTP_200_OK)
                 else:
-                   status_log= 1
-                
-                return Response({'messag':'Work Log status retrieved successfully.',
-                                'status':status_log,
-                                'clock_in' : worklogs[0]['created_at'],
-                                'clock_out' : worklogs[0]['end_at']
-                                },
-                                    status=status.HTTP_200_OK)
+                    status_log={
+                        'status':1,
+                        'clock_in' : None,
+                        'clock_out' : None
+                    }
+                    return Response({'messag':'Work Log status retrieved successfully.',
+                                    'status':1,
+                                    'clock_in' : None,
+                                    'clock_out' : None},
+                                        status=status.HTTP_200_OK)
             else:
                 status_log={
                     'status':1,
@@ -418,18 +518,10 @@ class WorkLogsStatus(APIView):
                                  'clock_in' : None,
                                  'clock_out' : None},
                                     status=status.HTTP_200_OK)
-
         except ValidationError as v:
             return Response ({'message':'This is an error is fetching logs',
                                 'error':v},
                                status=status.HTTP_400_BAD_REQUEST )
-
-
-
-
-
-
-
 
 # ******************************* Break logs***********************#
 class Notices(APIView):
@@ -474,32 +566,6 @@ class WorkLogsBreakType(generics.ListCreateAPIView):
                                 'error':v},
                                status=status.HTTP_400_BAD_REQUEST )
 
-# ****************** get the user from the token**************
-def getUser(request):
-    token = request.headers.get('Authorization', " ").split(' ')[1]
-    decoded_payload = jwt_decode_handler(token)
-
-    return decoded_payload['user_id']
-
-# ************************ formated the date*************
-def getHours(hours):
-    date = [hours]
-    df = pd.DataFrame(date, columns = ['Date']) 
-    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%m/%d/%Y %H:%M:%S.%f')
-    date = datetime.strptime(df['Date'][0],'%m/%d/%Y %H:%M:%S.%f')
-    return date
-  
-
-
-
-def base64_file(data, name=None):
-    _format, _img_str = data.split(';base64,')
-    _name, ext = _format.split('/')
-    if not name:
-        name = _name.split(":")[-1]
-    return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
-
-
 class Styling(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
@@ -518,7 +584,6 @@ class Styling(generics.ListCreateAPIView):
                                 'error':v},
                                status=status.HTTP_400_BAD_REQUEST )
 
-
 class Typography(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     def get(self, request):
@@ -536,4 +601,51 @@ class Typography(generics.ListCreateAPIView):
             return Response ({'message':'This is an error is fetching break',
                                 'error':v},
                                status=status.HTTP_400_BAD_REQUEST )
+
+class StylingTypography(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+        try:
+            user = getUser(request)
+            get_admin = User.objects.values('admin_id__id').get(id = user)
+
+            return Response({'messag':'styling has retieve successfully.',
+                            'style':
+                               StyleSerializer(StyleModel.objects.filter(admin_id = get_admin['admin_id__id']).last()).data,
+                            'typography':
+                            TypographySerializer(TypographyModel.objects.filter(admin_id = get_admin['admin_id__id']).last()).data},
+                                status=status.HTTP_200_OK)
+        except ValidationError as v:
+            return Response ({'message':'This is an error is fetching break',
+                                'error':v},
+                               status=status.HTTP_400_BAD_REQUEST )
   
+# ****************** get the user from the token**************
+def getUser(request):
+    token = request.headers.get('Authorization', " ").split(' ')[1]
+    decoded_payload = jwt_decode_handler(token)
+
+    return decoded_payload['user_id']
+
+# ************************ formated the date*************
+def convert_to_hours(seconds): 
+    seconds = seconds % (24 * 3600) 
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+      
+    return "%d:%02d:%02d" % (hour, minutes, seconds) 
+def getHours(hours):
+    date = [hours]
+    df = pd.DataFrame(date, columns = ['Date']) 
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%m/%d/%Y %H:%M:%S.%f')
+    date = datetime.strptime(df['Date'][0],'%m/%d/%Y %H:%M:%S.%f')
+    return date
+
+def base64_file(data, name=None):
+    _format, _img_str = data.split(';base64,')
+    _name, ext = _format.split('/')
+    if not name:
+        name = _name.split(":")[-1]
+    return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))

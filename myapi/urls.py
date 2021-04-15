@@ -5,8 +5,10 @@ from django.conf import settings
 from adminside.views import FrontendAppView
 from django.conf.urls import url, include
 from .view import GeneratePDF, GeneratePDFMonth
+from django.contrib import admin
 
 urlpatterns = [
+    path('admin/' , admin.site.urls),
      path('api/token/', jwt_views.TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
      path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),

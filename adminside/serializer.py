@@ -15,7 +15,8 @@ from .models import (WorkLogsModel,
                     TypographyModel,
                     RegisterEmailModel,
                     SuspensionEmailModel,
-                    AdminEmailModel)
+                    AdminEmailModel,
+                    )
 
 # from .models import
 
@@ -192,3 +193,4 @@ class AdminEmailSerializer(serializers.ModelSerializer):
             setattr(instance, k, v)
             instance.save()
         return instance
+
